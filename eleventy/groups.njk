@@ -1,0 +1,23 @@
+---
+pagination:
+  data: local.languages
+  size: 1
+  alias: current
+permalink: "{{ current.code }}/groups/"
+layout: layout.njk
+---
+
+<!--{{ local.groups | dump }}-->
+ <table>
+  <tr>
+    <th>Name</th>
+    <th>Disc.</th>
+    <th>Monday</th>
+    <th>Saturday</th>
+  </tr>
+  <tr>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+</table>

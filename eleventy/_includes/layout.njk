@@ -1,0 +1,143 @@
+---
+title: Judo club Brunssum
+---
+<!doctype html>
+<html lang="en" data-theme="dark">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="light dark" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.yellow.min.css"
+        />
+        <link rel="stylesheet" href="/static/styles.css" />
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <a href="#">
+                    <img src="/static/logo.png" class="logo" />
+                </a>
+                <nav>
+                    <ul></ul>
+                    <ul>
+                        <li><a href="/{{ page.url | getLang }}/home" class="secondary">Home</a></li>
+                        {% for item in local.menuItems | filterLang(page.url | getLang) %}
+                            <li>
+                            {% if item.links.length == 1 %}
+                                <button href="/{{ item.links[0].lang }}{{ item.links[0].href }}" class="secondary outline">
+                                    {{ item.links[0].label }}
+                                </button>
+                            {% else %}
+                                <details class="dropdown">
+                                    <summary
+                                        href="{{ item.href }}"
+                                        role="button"
+                                        class="secondary outline"
+                                    >
+                                        {{ item.label }}
+                                    </summary>
+                                    <ul dir="rtl">
+                                        {% for link in item.links %}
+                                            <li><a href="/{{ item.lang }}{{ link.href }}">{{ link.label }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </details>
+                            {% endif %}
+                            </li>
+                        {% endfor %}
+                        <li>
+                            <details class="dropdown">
+                                <summary role="button" class="outline">
+                                    {% for lang in local.lang %}
+                                        {% if lang.lang == (page.url | getLang) %}
+                                            {{ lang.label }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </summary>
+                                <ul dir="rtl">
+                                    {% for lang in local.lang %}
+                                        <li><a href="{{ page.url | replaceLang(lang.code)}}">{{lang.name}}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            </details>
+                        </li>
+                    </ul>
+                </nav>
+                <input id="menu-button" type="checkbox" />
+            </div>
+        </header>
+        <main class="container">
+            {{ content | safe }}
+        </main>
+        <footer class="container">
+            <nav>
+                <ul>
+                    <li>
+                        <article>
+                            <hgroup>
+                                <h6>Social media</h6>
+                                <img
+                                    src="/static/Facebook_Logo_Secondary.png"
+                                    style="width: 4em; padding: 0.5em"
+                                    href="https://www.facebook.com/JCBrunssum/"
+                                />
+                                <img
+                                    src="/static/Instagram_Glyph_White.svg"
+                                    style="width: 4em; padding: 0.5em"
+                                    href="https://www.instagram.com/judoclub_brunssum/"
+                                />
+                                <img
+                                    src="/static/Digital_Glyph_White.svg"
+                                    style="width: 4em; padding: 0.5em"
+                                    href="/#">
+                            </hgroup>
+                        </article>
+                    </li>
+                </ul>
+                <ul>
+                    <l1>
+                        <article>
+                            <hgroup>
+                                <h6>Bezoekadres</h6>
+                                <p>
+                                    Heugerstraat 2A, 6443 BS Brunssum<br />
+                                    Telefoon:
+                                    <a href="tel:0031455270016"
+                                        >045 - 52 700 16</a
+                                    ><br />
+                                    Email:
+                                    <a href="mailto:info@judoclubbrunssum.nl"
+                                        >info@judoclubbrunssum.nl</a
+                                    >
+                                </p>
+                            </hgroup>
+                        </article>
+                    </l1>
+                </ul>
+                <ul>
+                    <l1>
+                        <article>
+                            <hgroup>
+                                <h6>Postadres</h6>
+                                <p>
+                                    Regentessestraat 47, 6441 GD Brunssum<br />
+                                    Telefoon:
+                                    <a href="tel:0031622433444"
+                                        >06 - 22 43 34 44</a
+                                    ><br />
+                                    Email:
+                                    <a href="mailto:info@judoclubbrunssum.n"
+                                        >info@judoclubbrunssum.nl</a
+                                    >
+                                </p>
+                            </hgroup>
+                        </article>
+                    </l1>
+                </ul>
+            </nav>
+        </footer>
+    </body>
+</html>

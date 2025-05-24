@@ -1,0 +1,49 @@
+img.logo {
+    width: 4em;
+    height: calc(4em * 1.25779376);
+    filter: brightness(0);
+}
+
+/* https://angel-rs.github.io/css-color-filter-generator/ with #f2df0d */
+[data-theme="dark"] img.logo {
+    filter: brightness(0) saturate(100%) invert(92%) sepia(95%) saturate(4120%)
+        hue-rotate(341deg) brightness(93%) contrast(106%);
+}
+header {
+    background-image: url(http://judoclubbrunssum.nl/wp-content/uploads/2015/06/band_s05.jpg);
+    background-repeat: repeat-y;
+    border-bottom: 2px solid #f2df0d;
+}
+header > div {
+    display: flex;
+    gap: 2em;
+    justify-content: space-between;
+}
+
+nav details.dropdown {
+    margin: 0px;
+}
+#menu-button {
+    display: none;
+    margin-top: 0.6em;
+    width: 2em;
+    height: 2em;
+    background-size: 100% 100%;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23f2df0d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M3,3 h14 M3,10 h14 M3,17 h14' /%3E%3C/svg%3E");
+}
+#menu-button:checked {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231C212C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M3,3 h14 M3,10 h14 M3,17 h14' /%3E%3C/svg%3E");
+}
+@media (max-width: 1023px) {
+    nav,
+    nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #menu-button {
+        display: block;
+    }
+    nav:has(+ #menu-button:not(:checked)) {
+        display: none;
+    }
+}

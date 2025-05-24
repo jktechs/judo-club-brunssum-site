@@ -1,0 +1,13 @@
+---
+pagination:
+  data: local.infoPages
+  size: 1
+  alias: current
+permalink: "{{ current.lang }}/{{ current.url | slugify }}/"
+layout: layout.njk
+---
+
+<!-- <pre></pre> | markdown | safe  -->
+<article>
+    {{ current.content.document | slate | safe }}
+</article>

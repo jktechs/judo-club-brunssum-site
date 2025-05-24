@@ -1,0 +1,17 @@
+---
+pagination:
+  data: local.rolepages
+  size: 1
+  alias: current
+permalink: "{{ current.lang }}/role/{{ current.role | slugify }}/"
+layout: layout.njk
+---
+{% for item in local.roles %}
+    {% if item.lang == current.lang %}
+        {% if current.role == item.role %}
+            <article>
+                {{ item.discription.document | slate | safe }}
+            </article>
+        {% endif %}
+    {% endif %}
+{% endfor %}
