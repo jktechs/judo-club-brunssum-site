@@ -15,8 +15,6 @@ services:
     command: sh -c "npm i && npx keystone"
   eleventy:
     image: node:jod-bullseye
-    ports:
-      - "8080:8080"
     environment:
       - NODE_ENV=development # production
       - HOST=0.0.0.0
@@ -25,4 +23,10 @@ services:
     volumes:
       - ./eleventy:/eleventy
     working_dir: /eleventy
-    command: sh -c "npm i && npx eleventy --serve"
+    command: sh -c "npm i && npx eleventy --watch"
+  server:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./eleventy/_site:/usr/share/nginx/html:ro
