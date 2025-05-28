@@ -27,6 +27,10 @@ services:
       - ./eleventy:/eleventy
     working_dir: /eleventy
     command: sh -c "npm i && npx eleventy --watch"
+    networks:
+      - merge_network
+    depends_on:
+      - keystonejs
 
   server:
     image: nginx:alpine

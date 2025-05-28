@@ -74,7 +74,7 @@ export default withAuth(
     },
     session,
     ui: {
-      basePath: "/admin",
+      basePath: "/api",
     },
     server: {
       extendExpressApp: (app, context) => {

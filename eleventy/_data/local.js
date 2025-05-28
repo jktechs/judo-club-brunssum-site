@@ -46,7 +46,7 @@ const query = `
 `;
 
 async function request(data) {
-  let json = await Fetch("http://localhost:3000/api/graphql", {
+  let json = await Fetch("http://keystonejs:3000/api/graphql", {
     duration: "0d",
     type: "json",
     verbose: true,
