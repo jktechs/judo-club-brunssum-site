@@ -1,5 +1,4 @@
 import {
-  JSONValue,
   BaseListTypeInfo,
   FieldTypeFunc,
   CommonFieldConfig,

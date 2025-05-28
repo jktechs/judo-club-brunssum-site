@@ -73,12 +73,14 @@ export default withAuth(
       },
     },
     session,
+    ui: {
+      basePath: "/admin",
+    },
     server: {
       extendExpressApp: (app, context) => {
         app.post("/api/rebuild", (req, res) => {
           const triggerPath = path.join(
             process.cwd(),
-            "..",
             "..",
             "eleventy",
             "trigger.html",

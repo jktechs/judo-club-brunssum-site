@@ -87,7 +87,9 @@ export const Cell: CellComponent = ({ item, field, linkTo }) => {
     value = {};
   }
   console.dir(value);
-  let values = Object.values(value).map(serialize).join(", ");
+  let values = Object.values(value)
+    .map((v: any) => serialize(v))
+    .join(", ");
   return linkTo ? (
     <CellLink {...linkTo}>{values}</CellLink>
   ) : (

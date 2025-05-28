@@ -1,5 +1,6 @@
 import { graphql, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
+type BaseItem = { id: { toString(): string }; [key: string]: unknown };
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
 //   this is a few common fields for an example
@@ -15,7 +16,6 @@ import {
   virtual,
 } from "@keystone-6/core/fields";
 
-import { document } from "@keystone-6/fields-document";
 import { translatedText } from "./translatedText";
 import { translatedDocument } from "./translatedDocument";
 
@@ -131,7 +131,7 @@ export const lists = {
       title_en: virtual({
         field: graphql.field({
           type: graphql.String,
-          async resolve(item, args, context) {
+          async resolve(item: BaseItem, args, context) {
             const { title } = await context.query.InfoPage.findOne({
               where: { id: item.id.toString() },
               query: 'title(language: "en")',
@@ -153,7 +153,7 @@ export const lists = {
       label_en: virtual({
         field: graphql.field({
           type: graphql.String,
-          async resolve(item, args, context) {
+          async resolve(item: BaseItem, args, context) {
             const { label } = await context.query.MemberCount.findOne({
               where: { id: item.id.toString() },
               query: 'label(language: "en")',
@@ -175,7 +175,7 @@ export const lists = {
       label_en: virtual({
         field: graphql.field({
           type: graphql.String,
-          async resolve(item, args, context) {
+          async resolve(item: BaseItem, args, context) {
             const { label } = await context.query.Link.findOne({
               where: { id: item.id.toString() },
               query: 'label(language: "en")',
@@ -201,7 +201,7 @@ export const lists = {
       label_en: virtual({
         field: graphql.field({
           type: graphql.String,
-          async resolve(item, args, context) {
+          async resolve(item: BaseItem, args, context) {
             const { label } = await context.query.MenuItem.findOne({
               where: { id: item.id.toString() },
               query: 'label(language: "en")',
@@ -225,7 +225,7 @@ export const lists = {
       label_en: virtual({
         field: graphql.field({
           type: graphql.String,
-          async resolve(item, args, context) {
+          async resolve(item: BaseItem, args, context) {
             const { label } = await context.query.Download.findOne({
               where: { id: item.id.toString() },
               query: 'label(language: "en")',

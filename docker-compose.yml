@@ -1,0 +1,28 @@
+services:
+  keystonejs:
+    image: node:jod-bullseye
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_TELEMETRY_DEBUG=1
+    volumes:
+      - ./keystonejs:/keystonejs
+      # - /app/node_modules
+    working_dir: /keystonejs
+    command: sh -c "npm i && npx keystone"
+  eleventy:
+    image: node:jod-bullseye
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development # production
+      - HOST=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_TELEMETRY_DEBUG=1
+    volumes:
+      - ./eleventy:/eleventy
+    working_dir: /eleventy
+    command: sh -c "npm i && npx eleventy --serve"
