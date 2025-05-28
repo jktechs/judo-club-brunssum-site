@@ -3,11 +3,10 @@ pagination:
   data: local.infoPages
   size: 1
   alias: current
-permalink: "{{ current.lang }}/{{ current.url | slugify }}/"
+permalink: "{{ current.language }}/{{ current.url | slugify }}/"
 layout: layout.njk
 ---
-
-<!-- <pre></pre> | markdown | safe  -->
 <article>
-    {{ current.content.document | slate | safe }}
+    <h1>{{ current.title }}</h1>
+    {{ current.content | slate | safe }}
 </article>

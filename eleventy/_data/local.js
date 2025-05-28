@@ -3,6 +3,7 @@ import Fetch from "@11ty/eleventy-fetch";
 const query = `
   query($lang: String) {
     infoPages {
+      url: title(language: "en")
       title(language: $lang)
       content(language: $lang)
     }
@@ -33,21 +34,8 @@ const query = `
       }
       label(language: $lang)
     }
-    teachers: roles(where: {role: {equals: teacher}}) {
-      discription(language: $lang)
-      person {
-        name
-        picture { url }
-      }
-    }
-    board: roles(where: {role: {equals: board}}) {
-      discription(language: $lang)
-      person {
-        name
-        picture { url }
-      }
-    }
-    counselor: roles(where: {role: {equals: counselor}}) {
+    roles {
+      role
       discription(language: $lang)
       person {
         name
@@ -58,7 +46,7 @@ const query = `
 `;
 
 async function request(data) {
-  let json = await Fetch("http://192.168.2.8:3000/api/graphql", {
+  let json = await Fetch("http://localhost:3000/api/graphql", {
     duration: "0d",
     type: "json",
     verbose: true,
@@ -78,18 +66,20 @@ export default async function (config) {
     { code: "nl", name: "Nederlands", language: "Taal" },
     { code: "en", name: "Engels", language: "Language" },
   ];
-  let roles = await request({
-    query: "query { roles { role } }",
-  }).roles;
+  let roles = (
+    await request({
+      query: "query { roles { role } }",
+    })
+  ).roles;
 
-  let data = {};
   let unique_roles = [];
   for (let role of roles) {
     if (!unique_roles.includes(role.role)) {
-      unique_roles.push(role);
+      unique_roles.push(role.role);
     }
   }
-  for (let lang of languages) {
+  let data = { languages };
+  for (let lang of data.languages) {
     let json = await request({ query, variables: { lang: lang.code } });
     for (let i of Object.keys(json)) {
       for (let j of json[i]) {
@@ -98,9 +88,8 @@ export default async function (config) {
       data[i] = (data[i] || []).concat(json[i]);
     }
   }
-  data["languages"] = info.languages;
-  data["rolepages"] = roles.flatMap((role) =>
-    data["languages"].map(({ code }) => ({ role, lang: code })),
+  data["rolepages"] = unique_roles.flatMap((role) =>
+    data.languages.map(({ code }) => ({ role, lang: code })),
   );
   console.log(JSON.stringify(data));
   return data;

@@ -51,15 +51,15 @@ title: Judo club Brunssum
                         <li>
                             <details class="dropdown">
                                 <summary role="button" class="outline">
-                                    {% for lang in local.lang %}
-                                        {% if lang.lang == (page.url | getLang) %}
-                                            {{ lang.label }}
+                                    {% for language in local.languages %}
+                                        {% if language.code == (page.url | getLang) %}
+                                            {{ language.language }}
                                         {% endif %}
                                     {% endfor %}
                                 </summary>
                                 <ul dir="rtl">
-                                    {% for lang in local.lang %}
-                                        <li><a href="{{ page.url | replaceLang(lang.code)}}">{{lang.name}}</a></li>
+                                    {% for language in local.languages %}
+                                        <li><a href="{{ page.url | replaceLang(language.code)}}">{{language.name}}</a></li>
                                     {% endfor %}
                                 </ul>
                             </details>
