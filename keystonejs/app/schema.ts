@@ -46,21 +46,21 @@ export const lists = {
       password: password({}),
     },
   }),
-  Language: list({
-    access: allowAll,
-    fields: {
-      name: text({
-        validation: { isRequired: true },
-      }),
-      code: text({
-        validation: { isRequired: true },
-        isIndexed: "unique",
-      }),
-      language: text({
-        validation: { isRequired: true },
-      }),
-    },
-  }),
+  // Language: list({
+  //   access: allowAll,
+  //   fields: {
+  //     name: text({
+  //       validation: { isRequired: true },
+  //     }),
+  //     code: text({
+  //       validation: { isRequired: true },
+  //       isIndexed: "unique",
+  //     }),
+  //     language: text({
+  //       validation: { isRequired: true },
+  //     }),
+  //   },
+  // }),
   Person: list({
     access: allowAll,
     fields: {

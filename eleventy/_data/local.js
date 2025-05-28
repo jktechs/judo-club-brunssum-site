@@ -1,23 +1,20 @@
 import Fetch from "@11ty/eleventy-fetch";
 
 const query = `
-  fragment disc on Role {
-    discription(where: {language: {code: {equals: $lang}}}) { content { document } }
-  }
   query($lang: String) {
     infoPages {
-      title(where: {language: {code: {equals: $lang}}}) { content }
-      content(where: {language:  {code: {equals: $lang}}}) { content { document } }
+      title(language: $lang)
+      content(language: $lang)
     }
     menuItems(orderBy: {order: asc}) {
-      label(where: {language: {code: {equals: $lang}}}) { content }
+      label(language: $lang)
       links {
-        label(where: {language: {code: {equals: $lang}}}) { content }
+        label(language: $lang)
         href
       }
     }
     groups {
-      discription(where: {language: {code: {equals: $lang}}}) { content { document } }
+      discription(language: $lang)
       end_monday
       end_saturday
       start_monday
@@ -25,7 +22,7 @@ const query = `
       name
     }
     people {
-      discription(where: {language: {code: {equals: $lang}}}) { content { document } }
+      discription(language: $lang)
       name
       picture { url }
     }
@@ -34,24 +31,24 @@ const query = `
         url
         filename
       }
-      label(where: {language: {code: {equals: $lang}}}) { content }
+      label(language: $lang)
     }
     teachers: roles(where: {role: {equals: teacher}}) {
-      ...disc
+      discription(language: $lang)
       person {
         name
         picture { url }
       }
     }
     board: roles(where: {role: {equals: board}}) {
-      ...disc
+      discription(language: $lang)
       person {
         name
         picture { url }
       }
     }
     counselor: roles(where: {role: {equals: counselor}}) {
-      ...disc
+      discription(language: $lang)
       person {
         name
         picture { url }
@@ -77,18 +74,22 @@ async function request(data) {
 }
 
 export default async function (config) {
-  let info = await request({
-    query: "query { languages { code, name, language } roles { role } }",
-  });
+  let languages = [
+    { code: "nl", name: "Nederlands", language: "Taal" },
+    { code: "en", name: "Engels", language: "Language" },
+  ];
+  let roles = await request({
+    query: "query { roles { role } }",
+  }).roles;
 
   let data = {};
-  let roles = [];
-  for (let role of info.roles) {
-    if (!roles.includes(role.role)) {
-      roles.push(role);
+  let unique_roles = [];
+  for (let role of roles) {
+    if (!unique_roles.includes(role.role)) {
+      unique_roles.push(role);
     }
   }
-  for (let lang of info.languages) {
+  for (let lang of languages) {
     let json = await request({ query, variables: { lang: lang.code } });
     for (let i of Object.keys(json)) {
       for (let j of json[i]) {
@@ -99,7 +100,7 @@ export default async function (config) {
   }
   data["languages"] = info.languages;
   data["rolepages"] = roles.flatMap((role) =>
-    data["languages"].map(({ code, ..._ }) => ({ role, lang: code })),
+    data["languages"].map(({ code }) => ({ role, lang: code })),
   );
   console.log(JSON.stringify(data));
   return data;

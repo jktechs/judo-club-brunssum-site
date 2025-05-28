@@ -62,17 +62,8 @@ export const translatedDocument =
           args: {
             language: graphql.arg({ type: graphql.String }),
           },
-          resolve: ({ value, item }, args, context, info) => {
-            let output =
-              isJSONObject(value) && args.language
-                ? value[args.language]
-                : value;
-            if (typeof output === "string") {
-              return output;
-            } else {
-              return value;
-            }
-          },
+          resolve: ({ value, item }, args, context, info) =>
+            isJSONObject(value) && args.language ? value[args.language] : value,
         }),
         input: {
           create: { arg: graphql.arg({ type: graphql.JSON }) },
