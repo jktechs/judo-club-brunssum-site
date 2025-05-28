@@ -8,6 +8,9 @@ import { lists } from "./schema";
 import { createAuth } from "@keystone-6/auth";
 import { statelessSessions } from "@keystone-6/core/session";
 
+import fs from "fs";
+import path from "path";
+
 let sessionMaxAge = 60 * 60 * 24; // 24 hours
 
 const session = statelessSessions({
@@ -70,23 +73,23 @@ export default withAuth(
       },
     },
     session,
-    //  server: {
-    //    extendExpressApp: (app, context) => {
-    //      app.use("/images", express.static("public/images"))
-    //
-    //      // Log all registered routes
-    //      app._router.stack
-    //        .filter(r => r.route || r.name === 'serveStatic')
-    //        .forEach(r => {
-    //          if (r.route) {
-    //            const methods = Object.keys(r.route.methods).join(', ').toUpperCase();
-    //            console.log(`${methods} ${r.route.path}`);
-    //          } else if (r.name === 'serveStatic' && r.regexp) {
-    //            console.log(`STATIC ${r.regexp}`);
-    //          }
-    //        });
-    //
-    //    }
-    //  }
+    server: {
+      extendExpressApp: (app, context) => {
+        app.post("/api/rebuild", (req, res) => {
+          const triggerPath = path.join(
+            process.cwd(),
+            "..",
+            "..",
+            "eleventy",
+            "trigger.html",
+          );
+          fs.writeFileSync(
+            triggerPath,
+            `Triggered at ${new Date().toISOString()}`,
+          );
+          res.redirect("/");
+        });
+      },
+    },
   }),
 );
