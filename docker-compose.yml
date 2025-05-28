@@ -13,6 +13,9 @@ services:
       # - /app/node_modules
     working_dir: /keystonejs
     command: sh -c "npm i && npx keystone"
+    networks:
+      - merge_network
+
   eleventy:
     image: node:jod-bullseye
     environment:
@@ -24,9 +27,20 @@ services:
       - ./eleventy:/eleventy
     working_dir: /eleventy
     command: sh -c "npm i && npx eleventy --watch"
+
   server:
     image: nginx:alpine
     ports:
       - "8080:80"
     volumes:
       - ./eleventy/_site:/usr/share/nginx/html:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - eleventy
+      - keystonejs
+    networks:
+      - merge_network
+
+networks:
+  merge_network:
+    driver: bridge
