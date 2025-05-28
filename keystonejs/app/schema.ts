@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core";
+import { graphql, list } from "@keystone-6/core";
 import { allowAll } from "@keystone-6/core/access";
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
@@ -12,9 +12,12 @@ import {
   select,
   file,
   password,
+  virtual,
 } from "@keystone-6/core/fields";
 
 import { document } from "@keystone-6/fields-document";
+import { translatedText } from "./translatedText";
+import { translatedDocument } from "./translatedDocument";
 
 // when using Typescript, you can refine your types to a stricter subset by importing
 // the generated types from '.keystone/types'
@@ -28,20 +31,6 @@ function timeField() {
         regex: /^([01]\d|2[0-3]):([0-5]\d)$/,
         explanation: "Time must be in HH:MM 24-hour format",
       },
-    },
-  });
-}
-function langField(ref: string) {
-  let fields = ["content", "language"];
-  return relationship({
-    ref,
-    many: true,
-    ui: {
-      cardFields: fields,
-      displayMode: "cards",
-      inlineCreate: { fields },
-      inlineEdit: { fields },
-      removeMode: 'none',
     },
   });
 }
@@ -68,38 +57,9 @@ export const lists = {
         isIndexed: "unique",
       }),
       language: text({
-        validation: { isRequired: true }
-      }),
-    },
-  }),
-  ShortText: list({
-    access: allowAll,
-    fields: {
-      content: text({
         validation: { isRequired: true },
       }),
-      language: relationship({
-        ref: "Language",
-      }),
     },
-    ui: {
-      labelField: "content"
-    }
-  }),
-  LongText: list({
-    access: allowAll,
-    fields: {
-      content: document({
-        formatting: true,
-        links: true,
-      }),
-      language: relationship({
-        ref: "Language",
-      }),
-    },
-//    ui: {
-//      labelField: "content"
-//    }
   }),
   Person: list({
     access: allowAll,
@@ -111,13 +71,13 @@ export const lists = {
       picture: image({
         storage: "local-images",
       }),
-      discription: langField("LongText"),
+      discription: translatedDocument({}),
     },
   }),
   Role: list({
     access: allowAll,
     fields: {
-      discription: langField("LongText"),
+      discription: translatedDocument({}),
       role: select({
         type: "enum",
         options: [
@@ -130,7 +90,7 @@ export const lists = {
     },
     ui: {
       labelField: "role",
-    }
+    },
   }),
   Group: list({
     access: allowAll,
@@ -139,12 +99,12 @@ export const lists = {
         validation: { isRequired: true },
         isIndexed: "unique",
       }),
-      discription: langField("LongText"),
+      discription: translatedText({}),
       price: float({
-        defaultValue: 0.,
-        validation: { isRequired: true, min: 0. },
-        precision: 5,
-        scale: 2,
+        defaultValue: 0,
+        validation: { isRequired: true, min: 0 },
+        // precision: 5,
+        // scale: 2,
       }),
       start_monday: timeField(),
       end_monday: timeField(),
@@ -160,63 +120,123 @@ export const lists = {
       //    inlineConnect: true,
       //  },
       //  many: false,
-      //}),
+      // }),
     },
   }),
   InfoPage: list({
     access: allowAll,
     fields: {
-      title: langField("ShortText"),
-      content: langField("LongText"),
+      title: translatedText({}),
+      content: translatedDocument({}),
+      title_en: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          async resolve(item, args, context) {
+            const { title } = await context.query.InfoPage.findOne({
+              where: { id: item.id.toString() },
+              query: 'title(language: "en")',
+            });
+            return title;
+          },
+        }),
+      }),
     },
-//    ui: {
-//      labelField: "title",
-//    },
+    ui: {
+      labelField: "title_en",
+    },
   }),
   MemberCount: list({
     access: allowAll,
     fields: {
-      label: langField("ShortText"),
+      label: translatedText({}),
       count: integer({ validation: { isRequired: true } }),
+      label_en: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          async resolve(item, args, context) {
+            const { label } = await context.query.MemberCount.findOne({
+              where: { id: item.id.toString() },
+              query: 'label(language: "en")',
+            });
+            return label;
+          },
+        }),
+      }),
     },
     ui: {
-      labelField: "label",
+      labelField: "label_en",
     },
   }),
   Link: list({
     access: allowAll,
     fields: {
-      label: langField("ShortText"),
+      label: translatedText({}),
       href: text({ validation: { isRequired: true } }),
+      label_en: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          async resolve(item, args, context) {
+            const { label } = await context.query.Link.findOne({
+              where: { id: item.id.toString() },
+              query: 'label(language: "en")',
+            });
+            return label;
+          },
+        }),
+      }),
     },
     ui: {
-      labelField: "label",
+      labelField: "label_en",
     },
   }),
   MenuItem: list({
     access: allowAll,
     fields: {
-      label: langField("ShortText"),
+      label: translatedText({}),
       links: relationship({
         ref: "Link",
         many: true,
       }),
       order: integer({ validation: { isRequired: true } }),
+      label_en: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          async resolve(item, args, context) {
+            const { label } = await context.query.MenuItem.findOne({
+              where: { id: item.id.toString() },
+              query: 'label(language: "en")',
+            });
+            return label;
+          },
+        }),
+      }),
     },
     ui: {
-      labelField: "label",
+      labelField: "label_en",
     },
   }),
   Download: list({
     access: allowAll,
     fields: {
-      label: langField("ShortText"),
+      label: translatedText({}),
       file: file({
         storage: "local-files",
       }),
+      label_en: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          async resolve(item, args, context) {
+            const { label } = await context.query.Download.findOne({
+              where: { id: item.id.toString() },
+              query: 'label(language: "en")',
+            });
+            return label;
+          },
+        }),
+      }),
     },
     ui: {
-      labelField: "label",
+      labelField: "label_en",
     },
   }),
 }; // satisfies Lists;
