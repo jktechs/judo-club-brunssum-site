@@ -23,6 +23,21 @@ import { translatedDocument } from "./translatedDocument";
 // the generated types from '.keystone/types'
 // import { type Lists } from ".keystone/types";
 
+type Session = {
+  data: {
+    id: string;
+  };
+};
+const isAdmin = ({ session }: { session?: Session }) => session !== undefined;
+const protect = {
+  operation: {
+    query: () => true,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+  },
+};
+
 function timeField() {
   return text({
     validation: {
@@ -36,7 +51,7 @@ function timeField() {
 }
 export const lists = {
   User: list({
-    access: allowAll,
+    access: protect,
     fields: {
       name: text({}),
       email: text({
@@ -62,7 +77,7 @@ export const lists = {
   //   },
   // }),
   Person: list({
-    access: allowAll,
+    access: protect,
     fields: {
       name: text({
         validation: { isRequired: true },
@@ -75,7 +90,7 @@ export const lists = {
     },
   }),
   Role: list({
-    access: allowAll,
+    access: protect,
     fields: {
       discription: translatedDocument({}),
       role: select({
@@ -93,7 +108,7 @@ export const lists = {
     },
   }),
   Group: list({
-    access: allowAll,
+    access: protect,
     fields: {
       name: text({
         validation: { isRequired: true },
@@ -124,7 +139,7 @@ export const lists = {
     },
   }),
   InfoPage: list({
-    access: allowAll,
+    access: protect,
     fields: {
       title: translatedText({}),
       content: translatedDocument({}),
@@ -146,7 +161,7 @@ export const lists = {
     },
   }),
   MemberCount: list({
-    access: allowAll,
+    access: protect,
     fields: {
       label: translatedText({}),
       count: integer({ validation: { isRequired: true } }),
@@ -168,7 +183,7 @@ export const lists = {
     },
   }),
   Link: list({
-    access: allowAll,
+    access: protect,
     fields: {
       label: translatedText({}),
       href: text({ validation: { isRequired: true } }),
@@ -190,7 +205,7 @@ export const lists = {
     },
   }),
   MenuItem: list({
-    access: allowAll,
+    access: protect,
     fields: {
       label: translatedText({}),
       links: relationship({
@@ -216,7 +231,7 @@ export const lists = {
     },
   }),
   Download: list({
-    access: allowAll,
+    access: protect,
     fields: {
       label: translatedText({}),
       file: file({
