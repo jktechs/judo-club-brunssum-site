@@ -47,7 +47,7 @@ const query = `
 
 async function request(data) {
   let json = await Fetch("http://keystonejs:3000/api/graphql", {
-    duration: "0d",
+    duration: "0s",
     type: "json",
     verbose: true,
     fetchOptions: {
@@ -81,6 +81,7 @@ export default async function (config) {
   let data = { languages };
   for (let lang of data.languages) {
     let json = await request({ query, variables: { lang: lang.code } });
+    console.log(lang.code + ": " + JSON.stringify(json));
     for (let i of Object.keys(json)) {
       for (let j of json[i]) {
         j["language"] = lang.code;

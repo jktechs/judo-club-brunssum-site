@@ -12,7 +12,7 @@ services:
       - ./keystonejs:/keystonejs
       # - /app/node_modules
     working_dir: /keystonejs
-    command: sh -c "npm i && npx keystone"
+    command: sh -c "npm i && npx keystone dev"
     networks:
       - merge_network
 
@@ -25,8 +25,9 @@ services:
       - NEXT_TELEMETRY_DEBUG=1
     volumes:
       - ./eleventy:/eleventy
+      - ./keystonejs:/keystonejs
     working_dir: /eleventy
-    command: sh -c "npm i && npx eleventy --watch"
+    command: sh -c "npm i && sleep 5 && npx eleventy --watch"
     networks:
       - merge_network
     depends_on:

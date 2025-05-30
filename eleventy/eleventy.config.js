@@ -7,6 +7,9 @@ import markdownIt from "markdown-it";
 const md = markdownIt();
 
 export default function (eleventyConfig) {
+  eleventyConfig.setUseGitIgnore(false);
+  eleventyConfig.addWatchTarget("../keystonejs/keystone.db");
+  eleventyConfig.addWatchTarget("trigger.html");
   eleventyConfig.addFilter("replaceLang", function (path, newLang) {
     return "/" + newLang + "/" + path?.split("/").slice(2).join("/");
   });

@@ -78,7 +78,7 @@ function serialize(nodes: Node[]) {
   return nodes
     .map((n: Node) => Node.string(n))
     .join("\n")
-    .slice(0, 60);
+    .slice(0, 30);
 }
 
 export const Cell: CellComponent = ({ item, field, linkTo }) => {
