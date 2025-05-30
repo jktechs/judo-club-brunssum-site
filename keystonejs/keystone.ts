@@ -10,6 +10,7 @@ import { statelessSessions } from "@keystone-6/core/session";
 
 import fs from "fs";
 import path from "path";
+import { exec } from "child_process";
 
 let sessionMaxAge = 60 * 60 * 24; // 24 hours
 
@@ -60,14 +61,16 @@ export default withAuth(
       "local-images": {
         kind: "local",
         type: "image",
-        generateUrl: (path) => `https://portfolio.jannickkoppe.site/api/images${path}`,
+        generateUrl: (path) =>
+          `https://portfolio.jannickkoppe.site/api/images${path}`,
         serverRoute: { path: "/api/images" },
         storagePath: "public/api/images",
       },
       "local-files": {
         kind: "local",
         type: "file",
-        generateUrl: (path) => `https://portfolio.jannickkoppe.site/api/files${path}`,
+        generateUrl: (path) =>
+          `https://portfolio.jannickkoppe.site/api/files${path}`,
         serverRoute: { path: "/api/files" },
         storagePath: "public/api/files",
       },
@@ -79,17 +82,14 @@ export default withAuth(
     server: {
       extendExpressApp: (app, context) => {
         app.post("/api/rebuild", (req, res) => {
-          const triggerPath = path.join(
-            process.cwd(),
-            "..",
-            "eleventy",
-            "trigger.html",
+          exec(
+            "npm i && npx eleventy",
+            { cwd: "/eleventy" },
+            (error, stdout, stderr) =>
+              res.send(
+                `Error: ${JSON.stringify(error)}<br/>stdout: ${stdout.replaceAll("\n", "<br/>")}<br/>stderr: ${stderr.replaceAll("\n", "<br/>")}`,
+              ),
           );
-          fs.writeFileSync(
-            triggerPath,
-            `Triggered at ${new Date().toISOString()}`,
-          );
-          res.redirect("/");
         });
       },
     },
