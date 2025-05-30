@@ -1,5 +1,3 @@
-import Fetch from "@11ty/eleventy-fetch";
-
 const query = `
   query($lang: String) {
     infoPages {
@@ -45,19 +43,29 @@ const query = `
   }
 `;
 
-async function request(data) {
-  let json = await Fetch("http://keystonejs:3000/api/graphql", {
-    duration: "0s",
-    type: "json",
-    verbose: true,
-    fetchOptions: {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    },
+async function request(query, variables) {
+  const headers = new Headers();
+  headers.append("Content-Type", "application/json");
+  let response = await fetch("http://keystonejs:3000/api/graphql", {
+    method: "POST",
+    headers: headers,
+    body: JSON.stringify({ query, variables }),
+    redirect: "follow",
   });
+  let json = await response.json();
+
+  // let json = await Fetch("http://keystonejs:3000/api/graphql", {
+  //   duration: "0s",
+  //   type: "json",
+  //   verbose: true,
+  //   fetchOptions: {
+  //     method: "post",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(data),
+  //   },
+  // });
   return json.data;
 }
 
@@ -66,11 +74,7 @@ export default async function (config) {
     { code: "nl", name: "Nederlands", language: "Taal" },
     { code: "en", name: "Engels", language: "Language" },
   ];
-  let roles = (
-    await request({
-      query: "query { roles { role } }",
-    })
-  ).roles;
+  let roles = (await request("query { roles { role } }", {})).roles;
 
   let unique_roles = [];
   for (let role of roles) {
@@ -80,7 +84,7 @@ export default async function (config) {
   }
   let data = { languages };
   for (let lang of data.languages) {
-    let json = await request({ query, variables: { lang: lang.code } });
+    let json = await request(query, { lang: lang.code });
     console.log(lang.code + ": " + JSON.stringify(json));
     for (let i of Object.keys(json)) {
       for (let j of json[i]) {
