@@ -27,9 +27,9 @@ title: Judo club Brunssum
                         {% for item in local.menuItems | filterLang(page.url | getLang) %}
                             <li>
                             {% if item.links.length == 1 %}
-                                <button href="/{{ item.links[0].lang }}{{ item.links[0].href }}" class="secondary outline">
+                                <a role="button" href="/{{ item.language }}{{ item.links[0].href }}" class="secondary outline" style="margin: 0px">
                                     {{ item.links[0].label }}
-                                </button>
+                                </a>
                             {% else %}
                                 <details class="dropdown">
                                     <summary
@@ -41,7 +41,7 @@ title: Judo club Brunssum
                                     </summary>
                                     <ul dir="rtl">
                                         {% for link in item.links %}
-                                            <li><a href="/{{ item.lang }}{{ link.href }}">{{ link.label }}</a></li>
+                                            <li><a href="/{{ item.language }}{{ link.href }}">{{ link.label }}</a></li>
                                         {% endfor %}
                                     </ul>
                                 </details>

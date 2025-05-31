@@ -27,7 +27,7 @@ export default function (eleventyConfig) {
     return renderKeystoneDocument(content || "");
   });
   eleventyConfig.addFilter("filterLang", (data, lang) => {
-    return data.filter((e) => e.lang == lang);
+    return data.filter((e) => e.language == lang);
   });
 
   return {
