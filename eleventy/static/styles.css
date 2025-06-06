@@ -3,6 +3,14 @@ img.logo {
     height: calc(4em * 1.25779376);
     filter: brightness(0);
 }
+.calander-day {
+    aspect-ratio: 1;
+    margin: 0 4px 8px 4px;
+    position: relative;
+}
+[disabled] {
+    opacity: var(--pico-form-element-disabled-opacity);
+}
 
 /* https://angel-rs.github.io/css-color-filter-generator/ with #f2df0d */
 [data-theme="dark"] img.logo {
@@ -10,7 +18,7 @@ img.logo {
         hue-rotate(341deg) brightness(93%) contrast(106%);
 }
 header {
-    background-image: url(http://judoclubbrunssum.nl/wp-content/uploads/2015/06/band_s05.jpg);
+    background-image: url(band.jpg);
     background-repeat: repeat-y;
     border-bottom: 2px solid #f2df0d;
 }

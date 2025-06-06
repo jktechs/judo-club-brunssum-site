@@ -81,7 +81,13 @@ export default withAuth(
     },
     server: {
       extendExpressApp: (app, context) => {
-        app.post("/api/rebuild", (req, res) => {
+        app.post("/api/rebuild", async (req, res) => {
+          let ctx = await context.withRequest(req, res);
+          if (ctx.session === undefined) {
+            res.status(401);
+            res.send();
+            return;
+          }
           exec(
             "npm i && npx eleventy",
             { cwd: "/eleventy" },

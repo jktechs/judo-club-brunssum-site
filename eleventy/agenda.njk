@@ -1,0 +1,47 @@
+---
+pagination:
+  data: local.months
+  size: 1
+  alias: month
+permalink: "{{ month.language }}/agenda/{{ month.year }}/{{ month.month }}/"
+layout: layout.njk
+---
+<article>
+    {% for year in local.years %}
+        <details>
+            <summary>{{ year }}</summary>
+            {% for month2 in [
+                {name: "jan", id: 1},
+                {name: "feb", id: 2},
+                {name: "mar", id: 3},
+                {name: "apr", id: 4},
+                {name: "may", id: 5},
+                {name: "jun", id: 6},
+                {name: "jul", id: 7},
+                {name: "aug", id: 8},
+                {name: "sep", id: 9},
+                {name: "oct", id: 10},
+                {name: "nov", id: 11},
+                {name: "dec", id: 12},
+            ]  %}
+                <a href="/{{ month.language }}/agenda/{{ year }}/{{ month2.id }}">{{ month2.name }}</a>
+            {% endfor %}
+        </details>
+    {% endfor %}
+</article>
+<article>
+    <h1>{{ month.year }}-{{ month.month }}</h1>
+</article>
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr">
+    {% for day in month.days %}
+        <article {% if day.padding %} disabled {% endif %} class="calander-day overflow-auto">
+            <p style="position:absolute;top:2px;left:2px">{{ day.date.getDate() }}</p>
+            <div>
+                {% for item in day.events %}
+                    {{ item.label[month.language] }}
+                    <small>{{ item.start_time }}-{{ item.end_time }}</small>
+                {% endfor %}
+            </div>
+        </article>
+    {% endfor %}
+</div>

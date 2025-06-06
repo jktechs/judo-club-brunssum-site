@@ -1,7 +1,21 @@
-const query = `
+const static_query = `
+  query {
+    roles { role }
+    events {
+      label
+      discription
+      day
+      start_time
+      end_time
+      repeat
+      repeat_end
+    }
+  }
+`;
+const lang_query = `
   query($lang: String) {
     infoPages {
-      url: title(language: "en")
+      title_en
       title(language: $lang)
       content(language: $lang)
     }
@@ -14,10 +28,11 @@ const query = `
     }
     groups {
       discription(language: $lang)
-      end_monday
-      end_saturday
-      start_monday
-      start_saturday
+      timeslots {
+        day
+        start_time
+        end_time
+      }
       name
     }
     people {
@@ -42,6 +57,74 @@ const query = `
     }
   }
 `;
+function last_year(events) {
+  let last = new Date();
+  for (let i of events) {
+    if (last === undefined || last < i.day) {
+      last = i.day;
+    } else if (i.repeat != "never" && last < i.repeat_end) {
+      last = i.repeat_end;
+    }
+  }
+  if (last.getDate() == 1 && last.getMonth() == 0) {
+    return last.getFullYear();
+  } else {
+    return last.getFullYear() + 1;
+  }
+}
+function generate_month(year, month, events) {
+  let days = [];
+  // day 0 of month in year.
+  let month_start = new Date(year, month - 1);
+  // day 0 of month+1 in year.
+  let month_end = new Date(year, month);
+
+  let padding = month_start.getDay();
+  if (padding == 0) padding += 7;
+
+  // day -1 of month+1 which is the last day of month in year.
+  let day_count = new Date(year, month, 0).getDate();
+  for (let i = 1 - padding; i < day_count; i++) {
+    days.push({
+      date: new Date(year, month - 1, 1 + i),
+      events: [],
+      padding: 1 + i <= 0,
+    });
+  }
+
+  for (let i of events) {
+    let day = new Date(i.day);
+    let end = undefined;
+    // "daily", "weekly", "never"
+    if (i.repeat != "never") {
+      end = new Date(i.repeat_end);
+    } else {
+      end = day;
+    }
+    if (
+      (day <= month_start && end > month_start) ||
+      (day < month_end && end >= month_end) ||
+      (day >= month_start && end < month_end)
+    ) {
+      let current = day;
+      if (i.repeat != "never") {
+        while (current < month_end) {
+          if (current >= month_start) {
+            days[current.getDate() - 1 + padding - 1].events.push(i);
+          }
+          if (i.repeat == "weekly") {
+            current = new Date(current.setDate(current.getDate() + 7));
+          } else {
+            current = new Date(current.setDate(current.getDate() + 1));
+          }
+        }
+      } else {
+        days[day.getDate() - 1 + padding - 1].events.push(i);
+      }
+    }
+  }
+  return days;
+}
 
 async function request(query, variables) {
   const headers = new Headers();
@@ -74,18 +157,35 @@ export default async function (config) {
     { code: "nl", name: "Nederlands", language: "Taal" },
     { code: "en", name: "Engels", language: "Language" },
   ];
-  let roles = (await request("query { roles { role } }", {})).roles;
 
+  let statics = await request(static_query, {});
+  let max_year = last_year(statics.events);
+  let min_year = new Date().getFullYear();
+  let months = [];
+  let years = [];
+  for (let i = min_year; i <= max_year; i++) {
+    years.push(i);
+    for (let j = 1; j <= 12; j++) {
+      months.push({
+        year: i,
+        month: j,
+        days: generate_month(i, j, statics.events),
+      });
+    }
+  }
+  // get all roles used.
   let unique_roles = [];
-  for (let role of roles) {
+  for (let role of statics.roles) {
     if (!unique_roles.includes(role.role)) {
       unique_roles.push(role.role);
     }
   }
+
+  // split data into languages
   let data = { languages };
   for (let lang of data.languages) {
-    let json = await request(query, { lang: lang.code });
-    console.log(lang.code + ": " + JSON.stringify(json));
+    let json = await request(lang_query, { lang: lang.code });
+
     for (let i of Object.keys(json)) {
       for (let j of json[i]) {
         j["language"] = lang.code;
@@ -93,9 +193,17 @@ export default async function (config) {
       data[i] = (data[i] || []).concat(json[i]);
     }
   }
+
+  // double paginate the role pages by language and role.
   data["rolepages"] = unique_roles.flatMap((role) =>
-    data.languages.map(({ code }) => ({ role, lang: code })),
+    data.languages.map(({ code }) => ({ role, language: code })),
   );
+  data["months"] = months.flatMap((month) =>
+    data.languages.map(({ code }) => ({ ...month, language: code })),
+  );
+  data["years"] = years;
+
+  // debug log the global state.
   console.log(JSON.stringify(data));
   return data;
 }

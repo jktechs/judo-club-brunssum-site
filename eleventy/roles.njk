@@ -3,7 +3,7 @@ pagination:
   data: local.rolepages
   size: 1
   alias: current
-permalink: "{{ current.lang }}/role/{{ current.role | slugify }}/"
+permalink: "{{ current.language }}/role/{{ current.role | slugify }}/"
 layout: layout.njk
 ---
 {% for item in local.roles %}

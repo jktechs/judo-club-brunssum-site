@@ -15,6 +15,26 @@ title: Judo club Brunssum
         <title>{{ title }}</title>
     </head>
     <body>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) return;
+                        const el = entry.target;
+                        if (el.tagName === 'A' && el.href && !el.dataset.prefetched) {
+                            setTimeout(() => fetch(el.href),1);
+                            el.dataset.prefetched = 'true';
+                        }
+                        observer.unobserve(el);
+                    });
+                });
+
+                // Observe all <a href> and <img src> elements
+                document.querySelectorAll('a[href], img[src]').forEach(el => {
+                    observer.observe(el);
+                });
+            });
+        </script>
         <header>
             <div class="container">
                 <a href="#">

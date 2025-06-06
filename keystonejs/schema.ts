@@ -1,5 +1,4 @@
 import { graphql, list } from "@keystone-6/core";
-import { allowAll } from "@keystone-6/core/access";
 type BaseItem = { id: { toString(): string }; [key: string]: unknown };
 
 // see https://keystonejs.com/docs/fields/overview for the full list of fields
@@ -14,6 +13,7 @@ import {
   file,
   password,
   virtual,
+  calendarDay,
 } from "@keystone-6/core/fields";
 
 import { translatedText } from "./translatedText";
@@ -61,21 +61,6 @@ export const lists = {
       password: password({}),
     },
   }),
-  // Language: list({
-  //   access: allowAll,
-  //   fields: {
-  //     name: text({
-  //       validation: { isRequired: true },
-  //     }),
-  //     code: text({
-  //       validation: { isRequired: true },
-  //       isIndexed: "unique",
-  //     }),
-  //     language: text({
-  //       validation: { isRequired: true },
-  //     }),
-  //   },
-  // }),
   Person: list({
     access: protect,
     fields: {
@@ -118,24 +103,11 @@ export const lists = {
       price: float({
         defaultValue: 0,
         validation: { isRequired: true, min: 0 },
-        // precision: 5,
-        // scale: 2,
       }),
-      start_monday: timeField(),
-      end_monday: timeField(),
-      start_saturday: timeField(),
-      end_saturday: timeField(),
-      //author: relationship({
-      //  ref: 'User.posts',
-      //  ui: {
-      //    displayMode: 'cards',
-      //    cardFields: ['name', 'email'],
-      //    inlineEdit: { fields: ['name', 'email'] },
-      //    linkToItem: true,
-      //    inlineConnect: true,
-      //  },
-      //  many: false,
-      // }),
+      timeslots: relationship({
+        ref: "Event",
+        many: true,
+      }),
     },
   }),
   InfoPage: list({
@@ -242,6 +214,42 @@ export const lists = {
           type: graphql.String,
           async resolve(item: BaseItem, args, context) {
             const { label } = await context.query.Download.findOne({
+              where: { id: item.id.toString() },
+              query: 'label(language: "en")',
+            });
+            return label;
+          },
+        }),
+      }),
+    },
+    ui: {
+      labelField: "label_en",
+    },
+  }),
+  Event: list({
+    access: protect,
+    fields: {
+      label: translatedText({}),
+      discription: translatedDocument({}),
+      day: calendarDay({
+        validation: { isRequired: true },
+      }),
+      start_time: timeField(),
+      end_time: timeField(),
+      repeat: select({
+        validation: { isRequired: true },
+        options: ["daily", "weekly", "never"],
+      }),
+      repeat_end: calendarDay({}),
+      exception: relationship({
+        ref: "Event",
+        many: true,
+      }),
+      label_en: virtual({
+        field: graphql.field({
+          type: graphql.String,
+          async resolve(item: BaseItem, args, context) {
+            const { label } = await context.query.Event.findOne({
               where: { id: item.id.toString() },
               query: 'label(language: "en")',
             });

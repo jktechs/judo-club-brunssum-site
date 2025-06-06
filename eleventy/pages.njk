@@ -3,7 +3,7 @@ pagination:
   data: local.infoPages
   size: 1
   alias: current
-permalink: "{{ current.language }}/{{ current.url | slugify }}/"
+permalink: "{{ current.language }}/{{ current.title_en | slugify }}/"
 layout: layout.njk
 ---
 <article>
