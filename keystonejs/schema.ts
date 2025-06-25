@@ -1,8 +1,5 @@
 import { graphql, list } from "@keystone-6/core";
-type BaseItem = { id: { toString(): string }; [key: string]: unknown };
 
-// see https://keystonejs.com/docs/fields/overview for the full list of fields
-//   this is a few common fields for an example
 import {
   float,
   text,
@@ -14,21 +11,23 @@ import {
   password,
   virtual,
   calendarDay,
+  checkbox,
+  timestamp,
 } from "@keystone-6/core/fields";
 
 import { translatedText } from "./translatedText";
 import { translatedDocument } from "./translatedDocument";
 
-// when using Typescript, you can refine your types to a stricter subset by importing
-// the generated types from '.keystone/types'
-// import { type Lists } from ".keystone/types";
+type BaseItem = { id: { toString(): string }; [key: string]: unknown };
 
 type Session = {
   data: {
     id: string;
+    admin: boolean;
   };
 };
-const isAdmin = ({ session }: { session?: Session }) => session !== undefined;
+const isAdmin = ({ session }: { session?: Session }) =>
+  session !== undefined && session.data.admin;
 const protect = {
   operation: {
     query: () => true,
@@ -38,22 +37,13 @@ const protect = {
   },
 };
 
-function timeField() {
-  return text({
-    validation: {
-      isRequired: true,
-      match: {
-        regex: /^([01]\d|2[0-3]):([0-5]\d)$/,
-        explanation: "Time must be in HH:MM 24-hour format",
-      },
-    },
-  });
-}
 export const lists = {
+  // Users that can edit database entries.
   User: list({
     access: protect,
     fields: {
-      name: text({}),
+      name: text({ validation: { isRequired: true } }),
+      admin: checkbox({ defaultValue: false }),
       email: text({
         validation: { isRequired: true },
         isIndexed: "unique",
@@ -61,6 +51,7 @@ export const lists = {
       password: password({}),
     },
   }),
+  // Peaple in the organisation.
   Person: list({
     access: protect,
     fields: {
@@ -74,24 +65,27 @@ export const lists = {
       discription: translatedDocument({}),
     },
   }),
+  // A role linked to a user. This indicates a person has a cetain role in the organisation.
   Role: list({
     access: protect,
     fields: {
-      discription: translatedDocument({}),
       role: select({
         type: "enum",
         options: [
           { label: "Teacher", value: "teacher" },
-          { label: "BoardMember", value: "board" },
-          { label: "TrustedCounselor", value: "counselor" },
+          { label: "Board Member", value: "board" },
+          { label: "Trusted Counselor", value: "counselor" },
         ],
+        validation: { isRequired: true },
       }),
       person: relationship({ ref: "Person" }),
+      discription: translatedDocument({}),
     },
     ui: {
       labelField: "role",
     },
   }),
+  // A group that has lessons and dictates the contribution.
   Group: list({
     access: protect,
     fields: {
@@ -110,50 +104,42 @@ export const lists = {
       }),
     },
   }),
+  // Static info pages.
   InfoPage: list({
     access: protect,
     fields: {
+      slug: text({ validation: { isRequired: true }, isIndexed: "unique" }),
       title: translatedText({}),
       content: translatedDocument({}),
-      title_en: virtual({
-        field: graphql.field({
-          type: graphql.String,
-          async resolve(item: BaseItem, args, context) {
-            const { title } = await context.query.InfoPage.findOne({
-              where: { id: item.id.toString() },
-              query: 'title(language: "en")',
-            });
-            return title;
-          },
-        }),
-      }),
     },
     ui: {
-      labelField: "title_en",
+      labelField: "slug",
     },
   }),
-  MemberCount: list({
-    access: protect,
-    fields: {
-      label: translatedText({}),
-      count: integer({ validation: { isRequired: true } }),
-      label_en: virtual({
-        field: graphql.field({
-          type: graphql.String,
-          async resolve(item: BaseItem, args, context) {
-            const { label } = await context.query.MemberCount.findOne({
-              where: { id: item.id.toString() },
-              query: 'label(language: "en")',
-            });
-            return label;
-          },
-        }),
-      }),
-    },
-    ui: {
-      labelField: "label_en",
-    },
-  }),
+  // // Member count info. Maybe removed.
+  // MemberCount: list({
+  //   access: protect,
+  //   fields: {
+  //     label: translatedText({}),
+  //     count: integer({ validation: { isRequired: true } }),
+  //     label_en: virtual({
+  //       field: graphql.field({
+  //         type: graphql.String,
+  //         async resolve(item: BaseItem, args, context) {
+  //           const { label } = await context.query.MemberCount.findOne({
+  //             where: { id: item.id.toString() },
+  //             query: 'label(language: "en")',
+  //           });
+  //           return label;
+  //         },
+  //       }),
+  //     }),
+  //   },
+  //   ui: {
+  //     labelField: "label_en",
+  //   },
+  // }),
+  // A menu link.
   Link: list({
     access: protect,
     fields: {
@@ -176,6 +162,7 @@ export const lists = {
       labelField: "label_en",
     },
   }),
+  // A menu item that contains one or more links.
   MenuItem: list({
     access: protect,
     fields: {
@@ -202,6 +189,7 @@ export const lists = {
       labelField: "label_en",
     },
   }),
+  // A downloadable item.
   Download: list({
     access: protect,
     fields: {
@@ -226,21 +214,36 @@ export const lists = {
       labelField: "label_en",
     },
   }),
+  // An event on the calander.
   Event: list({
     access: protect,
     fields: {
       label: translatedText({}),
       discription: translatedDocument({}),
-      day: calendarDay({
+      start: timestamp({
         validation: { isRequired: true },
+        isIndexed: "unique",
+        defaultValue: { kind: "now" },
       }),
-      start_time: timeField(),
-      end_time: timeField(),
+      duration: text({
+        defaultValue: "00:00",
+        validation: {
+          isRequired: true,
+          match: {
+            regex: /^([01]\d|2[0-3]):([0-5]\d)$/,
+            explanation: "Time must be in HH:MM 24-hour format",
+          },
+        },
+      }),
       repeat: select({
         validation: { isRequired: true },
         options: ["daily", "weekly", "never"],
       }),
-      repeat_end: calendarDay({}),
+      repeat_end: timestamp({
+        validation: { isRequired: true },
+        defaultValue: { kind: "now" },
+        isIndexed: "unique",
+      }),
       exception: relationship({
         ref: "Event",
         many: true,
@@ -260,6 +263,20 @@ export const lists = {
     },
     ui: {
       labelField: "label_en",
+    },
+  }),
+  // Direct translations of certain keys.
+  KeyTranslation: list({
+    access: protect,
+    fields: {
+      key: text({
+        validation: { isRequired: true },
+        isIndexed: "unique",
+      }),
+      value: translatedText({}),
+    },
+    ui: {
+      labelField: "key",
     },
   }),
 }; // satisfies Lists;

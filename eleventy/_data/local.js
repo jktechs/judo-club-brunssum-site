@@ -9,6 +9,10 @@ const static_query = `
       end_time
       repeat
       repeat_end
+      id
+      exception {
+        id
+      }
     }
   }
 `;
@@ -54,6 +58,10 @@ const lang_query = `
         name
         picture { url }
       }
+    }
+    keyTranslations {
+      key
+      value(language: $lang)
     }
   }
 `;
@@ -122,6 +130,17 @@ function generate_month(year, month, events) {
         days[day.getDate() - 1 + padding - 1].events.push(i);
       }
     }
+  }
+  for (let day of days) {
+    let events = [];
+    for (let event of day.events) {
+      if (
+        !event.exception.some((e1) => day.events.some((e2) => e2.id === e1.id))
+      ) {
+        events.push(event);
+      }
+    }
+    day.events = events;
   }
   return days;
 }

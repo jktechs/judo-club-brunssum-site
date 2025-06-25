@@ -1,5 +1,5 @@
 // import express from "express";
-import { config } from "@keystone-6/core";
+import { config, graphql } from "@keystone-6/core";
 import { sessionSecret } from "./global";
 
 // to keep this file tidy, we define our schema in a different file
@@ -11,6 +11,7 @@ import { statelessSessions } from "@keystone-6/core/session";
 import fs from "fs";
 import path from "path";
 import { exec } from "child_process";
+import { KeystoneContext } from "@keystone-6/core/types";
 
 let sessionMaxAge = 60 * 60 * 24; // 24 hours
 
@@ -26,9 +27,9 @@ const { withAuth } = createAuth({
   secretField: "password",
 
   // Additional options
-  sessionData: "id name email",
+  sessionData: "id name email admin",
   initFirstItem: {
-    fields: ["email", "password"],
+    fields: ["name", "email", "password", "admin"],
     itemData: {},
     skipKeystoneWelcome: true,
   },
@@ -75,29 +76,50 @@ export default withAuth(
         storagePath: "public/api/files",
       },
     },
+    // graphql: {
+    //   extendGraphqlSchema: graphql.extend((base) => {
+    //     return {
+    //       query: {
+    //         eventsByYear: graphql.field({
+    //           type: graphql.list(graphql.nonNull(base.object("Event"))),
+    //           args: {
+    //             year: graphql.arg({ type: graphql.nonNull(graphql.Int) }),
+    //           },
+    //           resolve: (source, { year }, context: KeystoneContext<any>) => {
+    //             return context.db.Event.findMany({where: {}});
+    //           },
+    //         }),
+    //       },
+    //     };
+    //   }),
+    // },
     session,
     ui: {
       basePath: "/api",
     },
     server: {
-      extendExpressApp: (app, context) => {
-        app.post("/api/rebuild", async (req, res) => {
-          let ctx = await context.withRequest(req, res);
-          if (ctx.session === undefined) {
-            res.status(401);
-            res.send();
-            return;
-          }
-          exec(
-            "npm i && npx eleventy",
-            { cwd: "/eleventy" },
-            (error, stdout, stderr) =>
-              res.send(
-                `Error: ${JSON.stringify(error)}<br/>stdout: ${stdout.replaceAll("\n", "<br/>")}<br/>stderr: ${stderr.replaceAll("\n", "<br/>")}`,
-              ),
-          );
-        });
+      cors: {
+        origin: ["http://localhost:5174", "http://localhost:3000"],
+        credentials: true,
       },
+      // extendExpressApp: (app, context) => {
+      //   app.post("/api/rebuild", async (req, res) => {
+      //     let ctx = await context.withRequest(req, res);
+      //     if (ctx.session === undefined) {
+      //       res.status(401);
+      //       res.send();
+      //       return;
+      //     }
+      //     exec(
+      //       "npm i && npx eleventy",
+      //       { cwd: "/eleventy" },
+      //       (error, stdout, stderr) =>
+      //         res.send(
+      //           `Error: ${JSON.stringify(error)}<br/>stdout: ${stdout.replaceAll("\n", "<br/>")}<br/>stderr: ${stderr.replaceAll("\n", "<br/>")}`,
+      //         ),
+      //     );
+      //   });
+      // },
     },
   }),
 );

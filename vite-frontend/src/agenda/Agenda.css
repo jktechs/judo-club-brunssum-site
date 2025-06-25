@@ -1,0 +1,15 @@
+@media (max-width: 1023px) {
+    .calander-day {
+        aspect-ratio: 0.71; /* ~sqrt(2) */
+    }
+}
+.calander-day {
+    padding: 2%;
+    aspect-ratio: 1;
+    margin: 0 2% 4% 2%;
+    overflow: hidden;
+}
+dialog:modal {
+    max-width: 100vw;
+    max-height: 100vw;
+}

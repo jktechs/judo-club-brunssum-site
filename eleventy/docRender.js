@@ -40,9 +40,10 @@ function renderNode(node) {
         after.push(i);
       }
     }
-    let innerHTML = "<div>" + areas.map(renderNode).join("</div><div>") + "</div>";
+    let innerHTML =
+      "<div>" + areas.map(renderNode).join("</div><div>") + "</div>";
     let afterHTML = after.map(renderNode).join("");
-    return `<div style="display: grid; grid-template-columns: ${node.layout.join("fr ") + "fr"}">${innerHTML}</div>${afterHTML}`;
+    return `<div class="grid" style="grid-template-columns: ${node.layout.join("fr ") + "fr"}">${innerHTML}</div>${afterHTML}`;
   }
 
   const innerHTML = children.map(renderNode).join("");
