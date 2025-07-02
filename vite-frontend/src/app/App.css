@@ -13,7 +13,7 @@ img.logo {
 }
 
 header {
-    background-image: url(band.jpg);
+    background-image: url(/band.jpg);
     background-repeat: repeat-y;
     border-bottom: 1px solid #f2df0d;
 }

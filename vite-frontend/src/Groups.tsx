@@ -2,59 +2,41 @@ import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { getDuration } from "./agenda/Agenda";
 import { Temporal } from "@js-temporal/polyfill";
+import { DAY_NAMES } from "./translation";
 
-const GROUPS = gql`
-  query ($language: String) {
-    groups {
-      name
-      price
-      discription(language: $language)
-      timeslots {
-        start
-        duration
-      }
-    }
-    mon: keyTranslation(where: { key: "monday" }) {
-      value(language: $language)
-    }
-    tue: keyTranslation(where: { key: "tuesday" }) {
-      value(language: $language)
-    }
-    wed: keyTranslation(where: { key: "wednesday" }) {
-      value(language: $language)
-    }
-    thu: keyTranslation(where: { key: "thursday" }) {
-      value(language: $language)
-    }
-    fri: keyTranslation(where: { key: "friday" }) {
-      value(language: $language)
-    }
-    sat: keyTranslation(where: { key: "saturday" }) {
-      value(language: $language)
-    }
-    sun: keyTranslation(where: { key: "sunday" }) {
-      value(language: $language)
-    }
-  }
-`;
-type Group = {
-  groups: {
-    name: string;
-    price: string;
-    discription: string;
-    timeslots: { start: string; duration: string }[];
-  }[];
-} & { [key: string]: { value: string } };
 function Groups() {
-  const { language } = useParams();
-  const { loading, error, data } = useQuery<Group>(GROUPS, {
-    variables: { language },
-  });
-  if (loading || error !== undefined || data === undefined) {
+  const { language = "nl" } = useParams();
+  const { error, data } = useQuery<{
+    groups: {
+      name: string;
+      price: string;
+      discription: string;
+      timeslots: { start: string; duration: string }[];
+    }[];
+  }>(
+    gql`
+      query ($language: String) {
+        groups {
+          name
+          price
+          discription(language: $language)
+          timeslots {
+            start
+            duration
+          }
+        }
+      }
+    `,
+    {
+      variables: { language },
+    },
+  );
+  if (error !== undefined) {
+    console.error(JSON.stringify(error));
+  }
+  if (data === undefined) {
     return <article aria-busy="true"></article>;
   } else {
-    const { mon, tue, wed, thu, fri, sat, sun } = data;
-    const days = [mon, tue, wed, thu, fri, sat, sun];
     return (
       <table>
         <thead>
@@ -82,7 +64,7 @@ function Groups() {
                     ).toZonedDateTimeISO("Europe/Amsterdam");
                     return (
                       <p key={timeslot.start}>
-                        {days[start.dayOfWeek - 1].value}{" "}
+                        {DAY_NAMES[start.dayOfWeek - 1][language]}{" "}
                         {getDuration(hour, minute, start)}
                       </p>
                     );

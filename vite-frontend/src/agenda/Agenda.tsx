@@ -1,79 +1,26 @@
 import { useParams } from "react-router-dom";
 import "./Agenda.css";
-import { type MouseEvent } from "react"; // type MouseEvent
+import { type MouseEvent } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { Temporal } from "@js-temporal/polyfill";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
-
-const MONTHS = gql`
-  query ($language: String, $start: DateTime, $end: DateTime) {
-    jan: keyTranslation(where: { key: "january" }) {
-      value(language: $language)
-    }
-    feb: keyTranslation(where: { key: "february" }) {
-      value(language: $language)
-    }
-    mar: keyTranslation(where: { key: "march" }) {
-      value(language: $language)
-    }
-    apr: keyTranslation(where: { key: "april" }) {
-      value(language: $language)
-    }
-    may: keyTranslation(where: { key: "may" }) {
-      value(language: $language)
-    }
-    jun: keyTranslation(where: { key: "june" }) {
-      value(language: $language)
-    }
-    jul: keyTranslation(where: { key: "july" }) {
-      value(language: $language)
-    }
-    aug: keyTranslation(where: { key: "august" }) {
-      value(language: $language)
-    }
-    sep: keyTranslation(where: { key: "september" }) {
-      value(language: $language)
-    }
-    oct: keyTranslation(where: { key: "october" }) {
-      value(language: $language)
-    }
-    nov: keyTranslation(where: { key: "november" }) {
-      value(language: $language)
-    }
-    dec: keyTranslation(where: { key: "december" }) {
-      value(language: $language)
-    }
-    events(where: { start: { lt: $end }, repeat_end: { gt: $start } }) {
-      id
-      label(language: $language)
-      discription(language: $language)
-      duration
-      start
-      repeat
-      repeat_end
-      exception {
-        id
-      }
-    }
-  }
-`;
+import { MONTH_NAMES } from "../translation";
 
 function opendialog(event: MouseEvent) {
   const dialog = event.currentTarget.querySelector("dialog");
-  console.log(dialog);
   if (dialog?.open) dialog.close();
   else dialog?.showModal();
 }
 
 type Event = {
   id: string;
-  exception: { id: string }[];
+  label: string;
   discription: unknown;
   duration: string;
-  label: string;
   start: string;
   repeat: "daily" | "weekly" | "never";
   repeat_end: string;
+  exception: { id: string }[];
 };
 type Month = {
   padding: number;
@@ -84,15 +31,17 @@ type Month = {
     minutes: number;
     label: string;
     start: Temporal.ZonedDateTime;
+    id: string;
+    exception: { id: string }[];
   }[][];
 };
 
-function getDays(
+function calcMonth(
   start: Temporal.ZonedDateTime,
   end: Temporal.ZonedDateTime,
   events: Event[],
 ): Month {
-  const data: Month = { padding: start.dayOfWeek - 1, events: [] };
+  const data: Month = { padding: start.dayOfWeek - 1, events: [] }; // week starts with monday
   for (let i = 0; i < start.daysInMonth; i++) {
     data.events.push([]);
   }
@@ -101,15 +50,17 @@ function getDays(
       "Europe/Amsterdam",
     );
     const [hours, minutes] = event.duration.split(":").map(Number);
-    const modified = {
+    const modified_event = {
       label: event.label,
       discription: event.discription,
       start: event_start,
       hours,
       minutes,
+      id: event.id,
+      exception: event.exception,
     };
     if (event.repeat === "never") {
-      data.events[event_start.day - 1].push(modified);
+      data.events[event_start.day - 1].push(modified_event);
     } else {
       const event_end = Temporal.Instant.from(
         event.repeat_end,
@@ -125,16 +76,24 @@ function getDays(
             ? event_end.day - 1
             : start.daysInMonth;
         for (let i = start_day; i <= end_day; i++) {
-          data.events[i - 1].push(modified);
+          data.events[i - 1].push(modified_event);
         }
       } else if (event.repeat === "weekly") {
         const offset = (event_start.dayOfWeek - start.dayOfWeek + 7) % 7;
         for (let i = offset; i <= start.daysInMonth; i += 7) {
-          data.events[i].push(modified);
+          data.events[i].push(modified_event);
         }
       }
     }
   }
+  // filter events using the exceptions
+  data.events.map((day) =>
+    day.filter((event) =>
+      event.exception.every((exception) =>
+        day.every((e) => e.id !== exception.id),
+      ),
+    ),
+  );
   return data;
 }
 function monthStart(year: number, month: number): Temporal.ZonedDateTime {
@@ -171,33 +130,50 @@ export function getDuration(
   );
 }
 function Agenda() {
-  const { date, language } = useParams();
+  const { date, language = "nl" } = useParams();
   let { year, month } = Temporal.Now.plainDateISO();
   if (date != undefined) {
     [year, month] = date.split("-").map(Number);
   }
   const month_start = monthStart(year, month);
   const month_end = monthStart(year, month + 1);
-  const { loading, error, data } = useQuery(MONTHS, {
-    variables: {
-      language,
-      start: month_start.toInstant().toString(),
-      end: month_end.toInstant().toString(),
+  const { error, data } = useQuery<{ events: Event[] }>(
+    gql`
+      query ($language: String, $start: DateTime, $end: DateTime) {
+        events(where: { start: { lt: $end }, repeat_end: { gt: $start } }) {
+          id
+          label(language: $language)
+          discription(language: $language)
+          duration
+          start
+          repeat
+          repeat_end
+          exception {
+            id
+          }
+        }
+      }
+    `,
+    {
+      variables: {
+        language,
+        start: month_start.toInstant().toString(),
+        end: month_end.toInstant().toString(),
+      },
     },
-  });
-  if (loading || error !== undefined) {
+  );
+  if (error !== undefined) {
+    console.error(JSON.stringify(error));
+  }
+  if (data === undefined) {
     return <article aria-busy="true"></article>;
   }
-  const { jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec } = data;
-  let months: { value: string }[] = [];
-  months = [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec];
-  const days = getDays(month_start, month_end, data.events);
-  console.dir(days);
+  const days = calcMonth(month_start, month_end, data.events);
   return (
     <>
       <article>
         <h1>
-          {year}-{months[month - 1].value}
+          {year}-{MONTH_NAMES[month - 1][language]}
         </h1>
       </article>
       <div
@@ -207,7 +183,7 @@ function Agenda() {
         }}
       >
         {Array.from({ length: days.padding }, (_, i) => (
-          // @ts-expect-error: ignoring type mismatch for now
+          // @ts-expect-error: disabled normaly cant be on an atricle but picocss expects it.
           <article key={i} disabled className="calander-day"></article>
         ))}
         {days.events.map((events, i) => {

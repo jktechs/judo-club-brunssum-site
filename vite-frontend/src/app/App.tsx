@@ -1,30 +1,51 @@
+import { LANGUAGE_TEXT } from "../translation";
 import "./App.css";
 import facebook from "./facebook.svg";
 import instagram from "./instagram.svg";
 import whatsapp from "./whatsapp.svg";
 import { gql, useQuery } from "@apollo/client";
-import { Link, Outlet, useLocation, useParams } from "react-router-dom";
+import {
+  Link,
+  Navigate,
+  Outlet,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 
-const NAVBAR = gql`
-  query ($language: String) {
-    menuItems(orderBy: { order: asc }) {
-      label(language: $language)
-      links {
-        label(language: $language)
-        href
+type MenuItem = { label: string; links: { label: string; href: string }[] };
+function App({ content }: { content?: React.ReactNode }) {
+  const { language = "nl" } = useParams();
+  const location = useLocation();
+  const start = location.pathname.substring(1).indexOf("/");
+  const path = location.pathname.substring(start + 1);
+  const { error, data } = useQuery<{
+    menuItems: MenuItem[];
+  }>(
+    gql`
+      query ($language: String) {
+        menuItems(orderBy: { order: asc }) {
+          label(language: $language)
+          links {
+            label(language: $language)
+            href
+          }
+        }
       }
-    }
-    language: keyTranslation(where: { key: "language" }) {
-      value(language: $language)
+    `,
+    {
+      variables: { language },
+    },
+  );
+  if (!["en", "nl"].includes(language)) {
+    if (start === -1) {
+      return <Navigate to={"/"} />;
+    } else {
+      return <Navigate to={"/nl" + path} />;
     }
   }
-`;
-
-function App() {
-  const { language } = useParams();
-  const { loading, error, data } = useQuery(NAVBAR, {
-    variables: { language },
-  });
+  if (error !== undefined) {
+    console.error(JSON.stringify(error));
+  }
   return (
     <>
       <header>
@@ -35,11 +56,16 @@ function App() {
           <nav>
             <ul />
             <ul>
-              {language !== undefined && !loading && error === undefined ? (
+              <li>
+                <a href={"/" + language + "/info/home"} className="secondary">
+                  Home
+                </a>
+              </li>
+              {data !== undefined ? (
                 <NavBar
                   language={language}
-                  language_text={data.language.value}
                   menuItems={data.menuItems}
+                  path={path}
                 />
               ) : (
                 <article aria-busy="true"></article>
@@ -50,7 +76,7 @@ function App() {
         </div>
       </header>
       <main className="container">
-        <Outlet />
+        {content !== undefined ? <>{content}</> : <Outlet />}
       </main>
       <footer className="container">
         <nav>
@@ -62,23 +88,12 @@ function App() {
 }
 type NavBarProps = {
   language: string;
-  language_text: string;
-  menuItems: {
-    links: { label: string; href: string }[];
-    label: string;
-  }[];
+  path: string;
+  menuItems: MenuItem[];
 };
-function NavBar({ language, language_text, menuItems }: NavBarProps) {
-  const location = useLocation();
-  const start = location.pathname.substring(1).indexOf("/");
-  const path = location.pathname.substring(start + 1);
+function NavBar({ language, menuItems, path }: NavBarProps) {
   return (
     <>
-      <li>
-        <a href={"/" + language + "/info/home"} className="secondary">
-          Home
-        </a>
-      </li>
       {menuItems.map((item) => {
         if (item.links.length == 1) {
           return (
@@ -115,7 +130,7 @@ function NavBar({ language, language_text, menuItems }: NavBarProps) {
       <li>
         <details className="dropdown">
           <summary role="button" className="outline">
-            {language_text}
+            {LANGUAGE_TEXT[language]}
           </summary>
           <ul dir="rtl">
             {[

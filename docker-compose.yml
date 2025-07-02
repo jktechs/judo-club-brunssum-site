@@ -11,6 +11,7 @@ services:
     volumes:
       - ./keystonejs:/keystonejs
       - ./eleventy:/eleventy
+      - ./vite-frontend:/vite-frontend
       # - /app/node_modules
     working_dir: /keystonejs
     command: sh -c "npm i && npx keystone dev"
