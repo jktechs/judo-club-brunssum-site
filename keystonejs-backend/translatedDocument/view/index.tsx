@@ -8,10 +8,10 @@ import {
 import { CellLink, CellContainer } from "@keystone-6/core/admin-ui/components";
 import { FieldContainer, FieldLabel } from "@keystone-ui/fields";
 import { Field as DocumentField } from "@keystone-6/fields-document/views";
-import { Descendant } from "slate";
+import { Descendant, Node } from "slate";
 import { features } from "..";
 import { useMemo } from "react";
-import { languages } from "../../global";
+import { languages } from "../../../global";
 
 export const controller = (
   config: FieldControllerConfig,
@@ -73,7 +73,6 @@ export const Field = ({
   });
 };
 
-import { Node } from "slate";
 function serialize(nodes: Node[]) {
   return nodes
     .map((n: Node) => Node.string(n))

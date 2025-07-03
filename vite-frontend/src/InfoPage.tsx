@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 function InfoPage() {
   const { language = "nl", slug = "home" } = useParams();
   const { error, data } = useQuery<{
+    // eslint-disable-next-line
     infoPage: { title: string; content: any } | null;
   }>(
     gql`

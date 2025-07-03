@@ -5,7 +5,12 @@ import {
   jsonFieldTypePolyfilledForSQLite,
 } from "@keystone-6/core/types";
 import { graphql } from "@keystone-6/core";
-import { isJSONObject } from "../global";
+import { JSONValue } from "@keystone-6/core/types";
+export function isJSONObject(
+  value: JSONValue,
+): value is { [key: string]: JSONValue } {
+  return !Array.isArray(value) && value !== null && typeof value === "object";
+}
 
 export type TranslatedTextFieldConfig<ListTypeInfo extends BaseListTypeInfo> =
   CommonFieldConfig<ListTypeInfo>;

@@ -11,6 +11,7 @@ import {
   useLocation,
   useParams,
 } from "react-router-dom";
+import { languages } from "../../../global";
 
 type MenuItem = { label: string; links: { label: string; href: string }[] };
 function App({ content }: { content?: React.ReactNode }) {
@@ -133,10 +134,7 @@ function NavBar({ language, menuItems, path }: NavBarProps) {
             {LANGUAGE_TEXT[language]}
           </summary>
           <ul dir="rtl">
-            {[
-              { name: "Nederlands", code: "nl" },
-              { name: "English", code: "en" },
-            ].map((language) => (
+            {languages.map((language) => (
               <li key={language.code}>
                 <a href={"/" + language.code + path}>{language.name}</a>
               </li>

@@ -2,8 +2,12 @@ import {
   FieldController,
   FieldControllerConfig,
   FieldProps,
+  CellComponent,
+  CardValueComponent,
 } from "@keystone-6/core/types";
 import { FieldContainer, FieldLabel, TextInput } from "@keystone-ui/fields";
+import { languages } from "../../../global";
+import { CellLink, CellContainer } from "@keystone-6/core/admin-ui/components";
 
 export const controller = (
   config: FieldControllerConfig,
@@ -64,9 +68,6 @@ export const Field = ({
   );
 };
 
-import { CellLink, CellContainer } from "@keystone-6/core/admin-ui/components";
-import { CellComponent } from "@keystone-6/core/types";
-
 export const Cell: CellComponent = ({ item, field, linkTo }) => {
   console.log("Cell render");
   let value = item[field.path];
@@ -81,9 +82,6 @@ export const Cell: CellComponent = ({ item, field, linkTo }) => {
   );
 };
 Cell.supportsLinkTo = true;
-
-import { CardValueComponent } from "@keystone-6/core/types";
-import { languages } from "../../global";
 
 export const CardValue: CardValueComponent = ({ item, field }) => {
   console.log("Card render");

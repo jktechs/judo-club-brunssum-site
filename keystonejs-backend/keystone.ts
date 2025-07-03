@@ -1,6 +1,6 @@
 // import express from "express";
 import { config, graphql } from "@keystone-6/core";
-import { sessionSecret } from "./global";
+import { sessionSecret } from "../global";
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from "./schema";

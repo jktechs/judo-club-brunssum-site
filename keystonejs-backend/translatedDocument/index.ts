@@ -6,7 +6,7 @@ import {
   CommonFieldConfig,
 } from "@keystone-6/core/types";
 import { graphql } from "@keystone-6/core";
-import { isJSONObject } from "../global";
+import { isJSONObject } from "../translatedText";
 import {
   DocumentFeatures,
   controller as documentController,
@@ -40,7 +40,7 @@ export const features: DocumentFeatures = {
     softBreaks: true,
   },
   dividers: true,
-  layouts: [[1],[1,1],[2,1]],
+  layouts: [[1], [1, 1], [2, 1]],
   links: true,
 };
 

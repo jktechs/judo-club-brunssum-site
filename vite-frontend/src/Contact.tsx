@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 
 function Contact() {
-  let { language = "nl" } = useParams();
+  const { language = "nl" } = useParams();
   return (
     <>
       <article>{"Contact:"}</article>
