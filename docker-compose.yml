@@ -11,6 +11,7 @@ services:
       - NEXT_TELEMETRY_DISABLED=1
       - NEXT_TELEMETRY_DEBUG=1
     volumes:
+      - ./global.ts:/global.ts
       - ./keystonejs-backend:/keystonejs-backend
       - ./vite-frontend:/vite-frontend
     working_dir: /keystonejs-backend
@@ -21,5 +22,8 @@ services:
   keystonejs-production:
     profiles: [production]
     build: .
+    volumes:
+      - ./files:/keystonejs-backend/public/files
+      - ./images:/keystonejs-backend/public/images
     ports:
       - "3000:3000"

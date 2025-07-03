@@ -36,11 +36,19 @@ const protect = {
     delete: isAdmin,
   },
 };
+const block = {
+  operation: {
+    query: isAdmin,
+    create: isAdmin,
+    update: isAdmin,
+    delete: isAdmin,
+  },
+};
 
 export const lists = {
   // Users that can edit database entries.
   User: list({
-    access: protect,
+    access: block,
     fields: {
       name: text({ validation: { isRequired: true } }),
       admin: checkbox({ defaultValue: false }),
@@ -263,20 +271,6 @@ export const lists = {
     },
     ui: {
       labelField: "label_en",
-    },
-  }),
-  // Direct translations of certain keys.
-  KeyTranslation: list({
-    access: protect,
-    fields: {
-      key: text({
-        validation: { isRequired: true },
-        isIndexed: "unique",
-      }),
-      value: translatedText({}),
-    },
-    ui: {
-      labelField: "key",
     },
   }),
 }; // satisfies Lists;
