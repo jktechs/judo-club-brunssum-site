@@ -1,6 +1,6 @@
 // import express from "express";
 import { config, graphql } from "@keystone-6/core";
-import { sessionSecret } from "../global";
+import { host, sessionSecret } from "../global";
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from "./schema";
@@ -74,16 +74,14 @@ export default withAuth(
       "local-images": {
         kind: "local",
         type: "image",
-        generateUrl: (path) =>
-          `https://portfolio.jannickkoppe.site/api/images${path}`,
+        generateUrl: (path) => host + `api/images${path}`,
         serverRoute: { path: "/api/images" },
         storagePath: "public/api/images",
       },
       "local-files": {
         kind: "local",
         type: "file",
-        generateUrl: (path) =>
-          `https://portfolio.jannickkoppe.site/api/files${path}`,
+        generateUrl: (path) => host + `api/files${path}`,
         serverRoute: { path: "/api/files" },
         storagePath: "public/api/files",
       },

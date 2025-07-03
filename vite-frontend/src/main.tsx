@@ -15,9 +15,10 @@ import Groups from "./Groups.tsx";
 import InfoPage from "./InfoPage.tsx";
 import Contact from "./Contact.tsx";
 import Downloads from "./Downloads.tsx";
+import { host } from "../../global.ts";
 
 const CLIENT = new ApolloClient({
-  uri: "http://localhost:3000/api/graphql",
+  uri: host + "api/graphql",
   cache: new InMemoryCache(),
 });
 // eslint-disable-next-line
