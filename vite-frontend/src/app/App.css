@@ -16,6 +16,8 @@ header {
     background-image: url(/band.jpg);
     background-repeat: repeat-y;
     border-bottom: 1px solid #f2df0d;
+    position: sticky;
+    top: 0;
 }
 header > div {
     display: flex;
@@ -47,5 +49,32 @@ nav details.dropdown {
     }
     nav:has(+ #menu-button:not(:checked)) {
         display: none;
+    }
+    table,
+    tbody {
+        display: contents;
+        border-top: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+        border-bottom: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+    }
+    thead {
+        display: none;
+    }
+    td {
+        display: block;
+        border-bottom: 0px;
+        border-top: 0px;
+    }
+    tr {
+        display: block;
+        border-top: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+        border-bottom: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+    }
+    td::before {
+        content: attr(data-label);
+        margin-right: 1em;
     }
 }

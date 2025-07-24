@@ -13,10 +13,6 @@ export const MONTH_NAMES: LanguageMap[] = [
   { en: "november", nl: "november" },
   { en: "december", nl: "december" },
 ];
-export const LANGUAGE_TEXT: LanguageMap = {
-  en: "language",
-  nl: "taal",
-};
 export const DAY_NAMES: LanguageMap[] = [
   { en: "monday", nl: "maandag" },
   { en: "tuesday", nl: "dinsdag" },
@@ -26,3 +22,37 @@ export const DAY_NAMES: LanguageMap[] = [
   { en: "saturday", nl: "zaterdag" },
   { en: "sunday", nl: "zondag" },
 ];
+export const TEXT_MAP: { [key: string]: LanguageMap } = {
+  language: {
+    en: "language",
+    nl: "taal",
+  },
+  groups: {
+    en: "groups",
+    nl: "groepen",
+  },
+  not_found: {
+    en: "Page could not be found.",
+    nl: "Pagina kan niet gevonden worden.",
+  },
+  name: {
+    en: "name",
+    nl: "naam",
+  },
+  message: {
+    en: "message",
+    nl: "bericht",
+  },
+  send: {
+    en: "send",
+    nl: "verstuur",
+  },
+  everyone: {
+    en: "everyone",
+    nl: "iedereen",
+  },
+};
+export function capitalize(str: string): string {
+  if (!str) return "";
+  return str[0].toUpperCase() + str.slice(1);
+}

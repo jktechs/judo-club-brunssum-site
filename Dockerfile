@@ -18,8 +18,7 @@ RUN npm run build
 WORKDIR /app/keystonejs-backend
 
 RUN npm i
-
-RUN npx keystone build
+RUN npm run build
 
 ENV NODE_ENV=production
 

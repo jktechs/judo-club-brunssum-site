@@ -1,6 +1,6 @@
 node_modules
 public
-.keystone
+.next
 keystone.db
 schema.graphql
 schema.prisma

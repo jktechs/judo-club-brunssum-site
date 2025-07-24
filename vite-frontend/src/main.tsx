@@ -16,22 +16,20 @@ import InfoPage from "./InfoPage.tsx";
 import Contact from "./Contact.tsx";
 import Downloads from "./Downloads.tsx";
 import { host } from "../../global.ts";
+import People from "./People.tsx";
+import { TEXT_MAP } from "./translation.ts";
+import Roles from "./Roles.tsx";
 
 const CLIENT = new ApolloClient({
   uri: host + "api/graphql",
   cache: new InMemoryCache(),
 });
 // eslint-disable-next-line
-const NotFound = () => (
-  <article>
-    {
-      {
-        en: "Page could not be found.",
-        nl: "Pagina kan niet gevonden worden.",
-      }[useParams().language ?? "nl"]
-    }
-  </article>
-);
+const NotFound = () => {
+  return (
+    <article>{TEXT_MAP["not_found"][useParams().language ?? "nl"]}</article>
+  );
+};
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ApolloProvider client={CLIENT}>
@@ -42,15 +40,15 @@ createRoot(document.getElementById("root")!).render(
             <Route index element={<InfoPage />} />
             <Route path="groups" element={<Groups />} />
             <Route path="contact" element={<Contact />} />
-            <Route path="info/" element={<Outlet />}>
-              <Route index element={<InfoPage />} />
-              <Route path=":slug" element={<InfoPage />} />
-            </Route>
-            <Route path="agenda" element={<Outlet />}>
-              <Route index element={<Agenda />} />
-              <Route path=":date" element={<Agenda />} />
-            </Route>
+            <Route path="info/:slug?" element={<InfoPage />} />
+            <Route path="agenda/:date?" element={<Agenda />} />
             <Route path="downloads/:item" element={<Downloads />} />
+            <Route path="people" element={<Outlet />}>
+              <Route index element={<People />} />
+              <Route path="teacher" element={<Roles role="teacher" />} />
+              <Route path="board" element={<Roles role="board" />} />
+              <Route path="counselor" element={<Roles role="counselor" />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

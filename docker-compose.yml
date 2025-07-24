@@ -16,8 +16,6 @@ services:
       - ./vite-frontend:/vite-frontend
     working_dir: /keystonejs-backend
     command: ["sh", "-c", "npm i && npx keystone dev"]
-    # networks:
-    #   - merge_network
   # start using: `sudo docker-compose --profile production up -d`
   keystonejs-production:
     profiles: [production]

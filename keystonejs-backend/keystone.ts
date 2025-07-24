@@ -11,8 +11,6 @@ import { statelessSessions } from "@keystone-6/core/session";
 import express from "express";
 import fs from "fs";
 import path from "path";
-import { exec } from "child_process";
-import { KeystoneContext } from "@keystone-6/core/types";
 import { createTransport } from "nodemailer";
 import { MailOptions } from "nodemailer/lib/smtp-transport";
 
@@ -137,53 +135,15 @@ export default withAuth(
             return res.redirect("/");
           });
         });
-        app.get("*", async (req, res, next) => {
+        app.use(express.static("../vite-frontend/dist", { fallthrough: true }));
+        app.use((req, res, next) => {
           if (req.path.startsWith("/api")) {
-            next();
-          } else {
-            let requestedPath = req.path === "/" ? "/index.html" : req.path;
-            let filePath = path.resolve(
-              "../vite-frontend/dist",
-              "." + requestedPath,
-            );
-            if (!filePath.startsWith(path.resolve("../vite-frontend/dist"))) {
-              return res.status(403).send("Access denied");
-            }
-            try {
-              let stat = await new Promise<fs.Stats>((res, rej) => {
-                fs.stat(filePath, (err, stats) => {
-                  if (err !== null) {
-                    rej(err);
-                  } else {
-                    res(stats);
-                  }
-                });
-              });
-              if (stat.isFile()) {
-                return res.sendFile(filePath);
-              }
-            } catch (e) {}
-            res
-              .status(404)
-              .sendFile(path.resolve("../vite-frontend/dist/index.html"));
+            return next(); // Let the 404 handler handle it
           }
+          res.sendFile(
+            path.join(__dirname, "../../vite-frontend/dist/index.html"),
+          );
         });
-        //   app.post("/api/rebuild", async (req, res) => {
-        //     let ctx = await context.withRequest(req, res);
-        //     if (ctx.session === undefined) {
-        //       res.status(401);
-        //       res.send();
-        //       return;
-        //     }
-        //     exec(
-        //       "npm i && npx eleventy",
-        //       { cwd: "/eleventy" },
-        //       (error, stdout, stderr) =>
-        //         res.send(
-        //           `Error: ${JSON.stringify(error)}<br/>stdout: ${stdout.replaceAll("\n", "<br/>")}<br/>stderr: ${stderr.replaceAll("\n", "<br/>")}`,
-        //         ),
-        //     );
-        //   });
       },
     },
   }),

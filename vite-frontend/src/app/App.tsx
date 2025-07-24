@@ -1,4 +1,4 @@
-import { LANGUAGE_TEXT } from "../translation";
+import { TEXT_MAP, capitalize } from "../translation";
 import "./App.css";
 import facebook from "./facebook.svg";
 import instagram from "./instagram.svg";
@@ -21,6 +21,12 @@ function App({ content }: { content?: React.ReactNode }) {
   const path = location.pathname.substring(start + 1);
   const { error, data } = useQuery<{
     menuItems: MenuItem[];
+    authenticatedItem: {
+      id: string;
+      name: string;
+      email: string;
+      admin: boolean;
+    } | null;
   }>(
     gql`
       query ($language: String) {
@@ -29,6 +35,14 @@ function App({ content }: { content?: React.ReactNode }) {
           links {
             label(language: $language)
             href
+          }
+        }
+        authenticatedItem {
+          ... on User {
+            admin
+            email
+            id
+            name
           }
         }
       }
@@ -131,7 +145,7 @@ function NavBar({ language, menuItems, path }: NavBarProps) {
       <li>
         <details className="dropdown">
           <summary role="button" className="outline">
-            {LANGUAGE_TEXT[language]}
+            {capitalize(TEXT_MAP["language"][language])}
           </summary>
           <ul dir="rtl">
             {languages.map((language) => (

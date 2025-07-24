@@ -1,4 +1,5 @@
 import { useParams } from "react-router-dom";
+import { capitalize, TEXT_MAP } from "./translation";
 
 function Contact() {
   const { language = "nl" } = useParams();
@@ -11,8 +12,8 @@ function Contact() {
           <input
             type="text"
             name="name"
-            placeholder="Name"
-            aria-label="Name"
+            placeholder={capitalize(TEXT_MAP["name"][language])}
+            aria-label={capitalize(TEXT_MAP["name"][language])}
             autoComplete="given-name"
           />
           <input
@@ -24,10 +25,10 @@ function Contact() {
           />
           <textarea
             name="message"
-            placeholder="Write a professional short bio..."
-            aria-label="Professional short bio"
+            placeholder={capitalize(TEXT_MAP["message"][language])}
+            aria-label={capitalize(TEXT_MAP["message"][language])}
           />
-          <input type="submit" value={"Send"} />
+          <input type="submit" value={capitalize(TEXT_MAP["send"][language])} />
         </form>
       </article>
     </>

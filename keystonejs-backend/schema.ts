@@ -10,13 +10,15 @@ import {
   file,
   password,
   virtual,
-  calendarDay,
   checkbox,
   timestamp,
 } from "@keystone-6/core/fields";
 
 import { translatedText } from "./translatedText";
 import { translatedDocument } from "./translatedDocument";
+import { BaseListTypeInfo, ListAccessControl } from "@keystone-6/core/types";
+
+// import {} from ".keystone/types";
 
 type BaseItem = { id: { toString(): string }; [key: string]: unknown };
 
@@ -28,7 +30,7 @@ type Session = {
 };
 const isAdmin = ({ session }: { session?: Session }) =>
   session !== undefined && session.data.admin;
-const protect = {
+const protect: ListAccessControl<BaseListTypeInfo> = {
   operation: {
     query: () => true,
     create: isAdmin,
@@ -36,12 +38,17 @@ const protect = {
     delete: isAdmin,
   },
 };
-const block = {
+const block: ListAccessControl<BaseListTypeInfo> = {
   operation: {
-    query: isAdmin,
+    query: () => true,
     create: isAdmin,
     update: isAdmin,
     delete: isAdmin,
+  },
+  filter: {
+    query: ({ session, context, listKey, operation }) => {
+      return isAdmin({ session }) ? {} : { id: { equals: session.itemId } };
+    },
   },
 };
 
@@ -85,6 +92,7 @@ export const lists = {
           { label: "Trusted Counselor", value: "counselor" },
         ],
         validation: { isRequired: true },
+        isIndexed: true,
       }),
       person: relationship({ ref: "Person" }),
       discription: translatedDocument({}),
@@ -124,29 +132,6 @@ export const lists = {
       labelField: "slug",
     },
   }),
-  // // Member count info. Maybe removed.
-  // MemberCount: list({
-  //   access: protect,
-  //   fields: {
-  //     label: translatedText({}),
-  //     count: integer({ validation: { isRequired: true } }),
-  //     label_en: virtual({
-  //       field: graphql.field({
-  //         type: graphql.String,
-  //         async resolve(item: BaseItem, args, context) {
-  //           const { label } = await context.query.MemberCount.findOne({
-  //             where: { id: item.id.toString() },
-  //             query: 'label(language: "en")',
-  //           });
-  //           return label;
-  //         },
-  //       }),
-  //     }),
-  //   },
-  //   ui: {
-  //     labelField: "label_en",
-  //   },
-  // }),
   // A menu link.
   Link: list({
     access: protect,
@@ -230,7 +215,7 @@ export const lists = {
       discription: translatedDocument({}),
       start: timestamp({
         validation: { isRequired: true },
-        isIndexed: "unique",
+        isIndexed: true,
         defaultValue: { kind: "now" },
       }),
       duration: text({
@@ -245,12 +230,12 @@ export const lists = {
       }),
       repeat: select({
         validation: { isRequired: true },
+        isIndexed: true,
         options: ["daily", "weekly", "never"],
       }),
       repeat_end: timestamp({
         validation: { isRequired: true },
         defaultValue: { kind: "now" },
-        isIndexed: "unique",
       }),
       exception: relationship({
         ref: "Event",
