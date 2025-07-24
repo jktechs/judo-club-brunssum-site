@@ -1,7 +1,6 @@
 services:
-  # start using: `sudo docker-compose --profile debug up -d`
+  # start using: `podman-compose -f docker-compose.debug.yml up -d`
   keystonejs-debug:
-    profiles: [debug]
     image: node:jod-bullseye
     ports:
       - "3000:3000"
@@ -16,12 +15,3 @@ services:
       - ./vite-frontend:/vite-frontend
     working_dir: /keystonejs-backend
     command: ["sh", "-c", "npm i && npx keystone dev"]
-  # start using: `sudo docker-compose --profile production up -d`
-  keystonejs-production:
-    profiles: [production]
-    build: .
-    volumes:
-      - ./files:/keystonejs-backend/public/files
-      - ./images:/keystonejs-backend/public/images
-    ports:
-      - "3000:3000"

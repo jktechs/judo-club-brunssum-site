@@ -1,0 +1,9 @@
+services:
+  # start using: `podman-compose -f docker-compose.production.yml up -d`
+  keystonejs-production:
+    build: .
+    volumes:
+      - ./files:/keystonejs-backend/public/files
+      - ./images:/keystonejs-backend/public/images
+    ports:
+      - "3000:3000"
