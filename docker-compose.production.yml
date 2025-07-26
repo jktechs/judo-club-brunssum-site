@@ -2,8 +2,10 @@ services:
   # start using: `podman-compose -f docker-compose.production.yml up -d`
   keystonejs-production:
     build: .
+    # image: docker.io/janenik/judo-club-brunssum-site:latest
     volumes:
-      - ./files:/keystonejs-backend/public/files
-      - ./images:/keystonejs-backend/public/images
+      - .keystonejs-backend/public/files:/app/keystonejs-backend/public/files
+      - .keystonejs-backend/public/images:/app/keystonejs-backend/public/images
+      # - .keystonejs-backend/keystone.db:/app/keystonejs-backend/keystone.db
     ports:
       - "3000:3000"
