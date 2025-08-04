@@ -1,0 +1,17 @@
+services:
+  # start using: `sudo podman-compose -f docker-compose.debug.yml up -d`
+  keystonejs-debug:
+    image: node:jod-bullseye
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_TELEMETRY_DEBUG=1
+    volumes:
+      - ./global.ts:/global.ts
+      - ./keystonejs-backend:/keystonejs-backend
+      - ./vite-frontend:/vite-frontend
+    working_dir: /keystonejs-backend
+    command: ["sh", "-c", "npm i && npx keystone dev"]
