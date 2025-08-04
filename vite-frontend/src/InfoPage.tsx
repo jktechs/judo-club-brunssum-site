@@ -44,7 +44,7 @@ function InfoPage() {
       );
     }
   } else {
-    return <article aria-busy="true"></article>;
+    return <article aria-busy="true" />;
   }
 }
 export default InfoPage;

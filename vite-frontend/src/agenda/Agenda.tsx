@@ -166,7 +166,7 @@ function Agenda() {
     console.error(JSON.stringify(error));
   }
   if (data === undefined) {
-    return <article aria-busy="true"></article>;
+    return <article aria-busy="true" />;
   }
   const days = calcMonth(month_start, month_end, data.events);
   return (

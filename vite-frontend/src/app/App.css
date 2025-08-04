@@ -11,13 +11,18 @@ img.logo {
 [disabled] {
     opacity: var(--pico-form-element-disabled-opacity);
 }
-
+.split {
+}
 header {
-    background-image: url(/band.jpg);
+    background-image: url(/band2.jpg);
+    border-bottom: 1px solid #000000;
     background-repeat: repeat-y;
-    border-bottom: 1px solid #f2df0d;
     position: sticky;
     top: 0;
+}
+[data-theme="dark"] header {
+    background-image: url(/band.jpg);
+    border-bottom: 1px solid #f2df0d;
 }
 header > div {
     display: flex;

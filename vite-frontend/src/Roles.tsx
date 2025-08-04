@@ -55,7 +55,7 @@ function Roles({ role }: { role: string }) {
           })}
         </>
       ) : (
-        <article aria-busy="true"></article>
+        <article aria-busy="true" />
       )}
     </>
   );

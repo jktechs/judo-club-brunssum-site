@@ -35,7 +35,7 @@ function Groups() {
     console.error(JSON.stringify(error));
   }
   if (data === undefined) {
-    return <article aria-busy="true"></article>;
+    return <article aria-busy="true" />;
   } else {
     return (
       <>

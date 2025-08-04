@@ -22,6 +22,54 @@ export const DAY_NAMES: LanguageMap[] = [
   { en: "saturday", nl: "zaterdag" },
   { en: "sunday", nl: "zondag" },
 ];
+export type Role = "teacher" | "board" | "counselor";
+export const ROLE_NAMES: {
+  "": LanguageMap[];
+  teacher: LanguageMap[];
+  board: LanguageMap[];
+  counselor: LanguageMap[];
+} = {
+  "": [
+    {
+      en: "some one",
+      nl: "iemand",
+    },
+    {
+      en: "everyone",
+      nl: "iedereen",
+    },
+  ],
+  teacher: [
+    {
+      en: "teacher",
+      nl: "leraar",
+    },
+    {
+      en: "teachers",
+      nl: "leraren",
+    },
+  ],
+  board: [
+    {
+      en: "board member",
+      nl: "bestuurs lid",
+    },
+    {
+      en: "board members",
+      nl: "bestuurs leden",
+    },
+  ],
+  counselor: [
+    {
+      en: "trusted counsler",
+      nl: "vertrouwenspersoon",
+    },
+    {
+      en: "trusted counslers",
+      nl: "vertrouwenspersonen",
+    },
+  ],
+};
 export const TEXT_MAP: { [key: string]: LanguageMap } = {
   language: {
     en: "language",
@@ -46,10 +94,6 @@ export const TEXT_MAP: { [key: string]: LanguageMap } = {
   send: {
     en: "send",
     nl: "verstuur",
-  },
-  everyone: {
-    en: "everyone",
-    nl: "iedereen",
   },
   success: {
     en: "success",

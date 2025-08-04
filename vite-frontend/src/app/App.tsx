@@ -83,7 +83,7 @@ function App({ content }: { content?: React.ReactNode }) {
                   path={path}
                 />
               ) : (
-                <article aria-busy="true"></article>
+                <article aria-busy="true" />
               )}
             </ul>
           </nav>
