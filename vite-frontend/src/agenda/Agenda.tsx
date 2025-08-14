@@ -80,7 +80,7 @@ function calcMonth(
         }
       } else if (event.repeat === "weekly") {
         const offset = (event_start.dayOfWeek - start.dayOfWeek + 7) % 7;
-        for (let i = offset; i <= start.daysInMonth; i += 7) {
+        for (let i = offset; i < start.daysInMonth; i += 7) {
           data.events[i].push(modified_event);
         }
       }
