@@ -103,6 +103,18 @@ export const TEXT_MAP: { [key: string]: LanguageMap } = {
     en: "there was an error",
     nl: "er was een error",
   },
+  theme: {
+    en: "theme",
+    nl: "thema",
+  },
+  dark: {
+    en: "dark",
+    nl: "donker",
+  },
+  light: {
+    en: "light",
+    nl: "licht",
+  },
 };
 export function capitalize(str: string): string {
   if (!str) return "";

@@ -10,12 +10,12 @@ import {
   useParams,
 } from "react-router-dom";
 import Agenda from "./agenda/Agenda.tsx";
-import Groups from "./Groups.tsx";
-import InfoPage from "./InfoPage.tsx";
+import Groups from "./groups/Groups.tsx";
+import InfoPage from "./info_page/InfoPage.tsx";
 import Contact from "./contact/Contact.tsx";
-import Downloads from "./Downloads.tsx";
+import Downloads from "./downloads/Downloads.tsx";
 import { host } from "../../global.ts";
-import People from "./People.tsx";
+import People from "./people/People.tsx";
 import { TEXT_MAP } from "./translation.ts";
 import Success from "./contact/Success.tsx";
 
@@ -46,11 +46,6 @@ createRoot(document.getElementById("root")!).render(
             <Route path="agenda/:date?" element={<Agenda />} />
             <Route path="downloads/:item" element={<Downloads />} />
             <Route path="people" element={<People />} />
-            {/*<Route index element={} />
-              <Route path="teacher" element={<Roles role="teacher" />} />
-              <Route path="board" element={<Roles role="board" />} />
-              <Route path="counselor" element={<Roles role="counselor" />} />
-            </Route>*/}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>

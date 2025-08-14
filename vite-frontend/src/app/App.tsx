@@ -12,9 +12,14 @@ import {
   useParams,
 } from "react-router-dom";
 import { languages } from "../../../global";
+import useCookie from "../useCookie";
+import useTheme from "../useTheme";
 
 type MenuItem = { label: string; links: { label: string; href: string }[] };
 function App({ content }: { content?: React.ReactNode }) {
+  const preferdTheme = useTheme();
+  const { cookie: themeCookie = preferdTheme, setCookie: setThemeCookie } =
+    useCookie("theme");
   const { language = "nl" } = useParams();
   const location = useLocation();
   const start = location.pathname.substring(1).indexOf("/");
@@ -62,11 +67,21 @@ function App({ content }: { content?: React.ReactNode }) {
     console.error(JSON.stringify(error));
   }
   return (
-    <>
+    // themeCookie
+    <div data-theme={themeCookie}>
       <header>
-        <div className="container" style={{ alignItems: "center" }}>
+        <div className="container">
           <a href={"/" + language + "/info/home"}>
-            <img src="/logo.png" className="logo" />
+            <img
+              src="/logo.png"
+              className="logo big"
+              style={{ margin: "10px" }}
+            />
+            <img
+              src="/logo-small.png"
+              className="logo small"
+              style={{ margin: "10px" }}
+            />
           </a>
           <nav>
             <ul />
@@ -81,6 +96,7 @@ function App({ content }: { content?: React.ReactNode }) {
                   language={language}
                   menuItems={data.menuItems}
                   path={path}
+                  setThemeCookie={setThemeCookie}
                 />
               ) : (
                 <article aria-busy="true" />
@@ -98,15 +114,16 @@ function App({ content }: { content?: React.ReactNode }) {
           <Footer />
         </nav>
       </footer>
-    </>
+    </div>
   );
 }
 type NavBarProps = {
   language: string;
   path: string;
   menuItems: MenuItem[];
+  setThemeCookie: (newValue: string) => void;
 };
-function NavBar({ language, menuItems, path }: NavBarProps) {
+function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
   return (
     <>
       {menuItems.map((item) => {
@@ -153,6 +170,31 @@ function NavBar({ language, menuItems, path }: NavBarProps) {
                 <a href={"/" + language.code + path}>{language.name}</a>
               </li>
             ))}
+          </ul>
+        </details>
+      </li>
+      <li>
+        <details className="dropdown">
+          <summary role="button" className="outline">
+            {capitalize(TEXT_MAP["theme"][language])}
+          </summary>
+          <ul dir="rtl">
+            <li>
+              <a
+                onClick={() => setThemeCookie("light")}
+                style={{ cursor: "pointer" }}
+              >
+                {capitalize(TEXT_MAP["light"][language])}
+              </a>
+            </li>
+            <li>
+              <a
+                onClick={() => setThemeCookie("dark")}
+                style={{ cursor: "pointer" }}
+              >
+                {capitalize(TEXT_MAP["dark"][language])}
+              </a>
+            </li>
           </ul>
         </details>
       </li>

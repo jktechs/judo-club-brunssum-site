@@ -1,5 +1,5 @@
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { capitalize, ROLE_NAMES, type Role } from "./translation";
+import { capitalize, ROLE_NAMES, type Role } from "../translation";
 import { gql, useQuery } from "@apollo/client";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 
@@ -73,7 +73,7 @@ function PeopleList({
                 )
               }
             >
-              {role === null ? ROLE_NAMES[c_role][0][language] : ""}
+              {role === null ? capitalize(ROLE_NAMES[c_role][0][language]) : ""}
               <br />
               <img src={person.picture?.url} />
               <h2>{person.name}</h2>
@@ -122,16 +122,16 @@ function Person({ language, name }: { language: string; name: string }) {
     return <article aria-busy="true" />;
   }
   return (
-    <div
-      className="split"
-      style={{ display: "grid", gridTemplateColumns: "auto auto" }}
-    >
+    <div className="split">
       <div>
         <article>
           <h1>{data.person.name}</h1>
         </article>
         <article>
-          <img src={data.person.picture?.url} />
+          <img
+            src={data.person.picture?.url}
+            style={{ marginBottom: "var(--pico-block-spacing-vertical)" }}
+          />
           <DocumentRenderer document={data.person.discription} />
         </article>
       </div>
@@ -154,7 +154,7 @@ function People() {
   if (name !== null) {
     return <Person language={language} name={name} />;
   }
-  const role = params.get("name") as Role | null;
+  const role = params.get("role") as Role | null;
   return <PeopleList language={language} role={role} />;
 
   // const { error, data } = useQuery<{

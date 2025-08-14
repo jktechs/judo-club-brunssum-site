@@ -1,17 +1,22 @@
 img.logo {
-    width: 4em;
-    height: calc(4em * 1.25779376);
+    height: 4em;
+    /*height: calc(4em * 1.25779376);*/
     filter: brightness(0);
+    margin: 0.25em;
 }
-/* https://angel-rs.github.io/css-color-filter-generator/ with #f2df0d */
+img.logo.big {
+    display: inline;
+}
+img.logo.small {
+    display: none;
+}
+/* defines the color of the dark themed logo. https://angel-rs.github.io/css-color-filter-generator/ with #f2df0d */
 [data-theme="dark"] img.logo {
     filter: brightness(0) saturate(100%) invert(92%) sepia(95%) saturate(4120%)
         hue-rotate(341deg) brightness(93%) contrast(106%);
 }
 [disabled] {
     opacity: var(--pico-form-element-disabled-opacity);
-}
-.split {
 }
 header {
     background-image: url(/band2.jpg);
@@ -24,6 +29,9 @@ header {
     background-image: url(/band.jpg);
     border-bottom: 1px solid #f2df0d;
 }
+div[data-theme] {
+    background-color: var(--pico-background-color);
+}
 header > div {
     display: flex;
     gap: 2em;
@@ -33,7 +41,10 @@ header > div {
 nav details.dropdown {
     margin: 0px;
 }
+
 #menu-button {
+    position: relative;
+    top: 1.5em;
     display: none;
     width: 2em;
     height: 2em;
@@ -41,9 +52,22 @@ nav details.dropdown {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23f2df0d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M4,4 h12 M4,10 h12 M4,16 h12' /%3E%3C/svg%3E");
 }
 #menu-button:checked {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231C212C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M4,4 h12 M4,10 h12 M4,16 h12' /%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231C212C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M4,4 l12,12 M4,16 l12,-12' /%3E%3C/svg%3E");
+}
+.split {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 @media (max-width: 1023px) {
+    .split {
+        display: contents;
+    }
+    img.logo.big {
+        display: none;
+    }
+    img.logo.small {
+        display: inline;
+    }
     nav,
     nav ul {
         flex-direction: column;
