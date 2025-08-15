@@ -1,23 +1,27 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import App from "./app/App.tsx";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import {
   BrowserRouter,
+  Navigate,
   Outlet,
   Route,
   Routes,
   useParams,
 } from "react-router-dom";
-import Agenda from "./agenda/Agenda.tsx";
-import Groups from "./groups/Groups.tsx";
-import InfoPage from "./info_page/InfoPage.tsx";
-import Contact from "./contact/Contact.tsx";
-import Downloads from "./downloads/Downloads.tsx";
 import { host } from "../../global.ts";
-import People from "./people/People.tsx";
 import { TEXT_MAP } from "./translation.ts";
-import Success from "./contact/Success.tsx";
+import { ErrorBoundary } from "react-error-boundary";
+import Split from "./Split.tsx";
+
+// import App from "./app/App.tsx";
+// import Agenda from "./agenda/Agenda.tsx";
+// import Groups from "./groups/Groups.tsx";
+// import InfoPage from "./info_page/InfoPage.tsx";
+// import Contact from "./contact/Contact.tsx";
+// import Downloads from "./downloads/Downloads.tsx";
+// import People from "./people/People.tsx";
+// import Success from "./contact/Success.tsx";
 
 const CLIENT = new ApolloClient({
   uri: host + "api/graphql",
@@ -31,25 +35,35 @@ const NotFound = () => {
 };
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ApolloProvider client={CLIENT}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<App content={<InfoPage />} />} />
-          <Route path="/:language/" element={<App />}>
-            <Route index element={<InfoPage />} />
-            <Route path="info/:slug?" element={<InfoPage />} />
-            <Route path="groups" element={<Groups />} />
-            <Route path="contact" element={<Outlet />}>
-              <Route index element={<Contact />} />
-              <Route path="success" element={<Success />} />
+    <ErrorBoundary
+      fallbackRender={(e) => <p>error: {JSON.stringify(e.error)}</p>}
+    >
+      <ApolloProvider client={CLIENT}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/nl/info/home" />} />
+            <Route path="/:language" element={<Split module="App" />}>
+              <Route index element={<Navigate to="info/home" />} />
+              <Route path="info" element={<Outlet />}>
+                <Route index element={<Navigate to="home" />} />
+                <Route path=":slug?" element={<Split module="InfoPage" />} />
+              </Route>
+              <Route path="groups" element={<Split module="Groups" />} />
+              <Route path="contact" element={<Outlet />}>
+                <Route index element={<Split module="Contact" />} />
+                <Route path="success" element={<Split module="Success" />} />
+              </Route>
+              <Route path="agenda/:date?" element={<Split module="Agenda" />} />
+              <Route
+                path="downloads/:item"
+                element={<Split module="Downloads" />}
+              />
+              <Route path="people" element={<Split module="People" />} />
+              <Route path="*" element={<NotFound />} />
             </Route>
-            <Route path="agenda/:date?" element={<Agenda />} />
-            <Route path="downloads/:item" element={<Downloads />} />
-            <Route path="people" element={<People />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </ApolloProvider>
+          </Routes>
+        </BrowserRouter>
+      </ApolloProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );

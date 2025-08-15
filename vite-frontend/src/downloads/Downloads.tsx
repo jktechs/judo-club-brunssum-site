@@ -1,4 +1,4 @@
-function Downloads() {
+import "./Downloads.css";
+export default function Downloads() {
   return <></>;
 }
-export default Downloads;

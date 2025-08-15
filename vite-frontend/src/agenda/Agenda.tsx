@@ -1,10 +1,11 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./Agenda.css";
 import { type MouseEvent } from "react";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { Temporal } from "@js-temporal/polyfill";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
-import { MONTH_NAMES } from "../translation";
+import { capitalize, MONTH_NAMES } from "../translation";
+import { AGENDA_QUERY, type QueryResult } from "../querys";
 
 function opendialog(event: MouseEvent) {
   const dialog = event.currentTarget.querySelector("dialog");
@@ -12,16 +13,6 @@ function opendialog(event: MouseEvent) {
   else dialog?.showModal();
 }
 
-type Event = {
-  id: string;
-  label: string;
-  discription: unknown;
-  duration: string;
-  start: string;
-  repeat: "daily" | "weekly" | "never";
-  repeat_end: string;
-  exception: { id: string }[];
-};
 type Month = {
   padding: number;
   events: {
@@ -39,7 +30,7 @@ type Month = {
 function calcMonth(
   start: Temporal.ZonedDateTime,
   end: Temporal.ZonedDateTime,
-  events: Event[],
+  events: QueryResult<typeof AGENDA_QUERY>["events"],
 ): Month {
   const data: Month = { padding: start.dayOfWeek - 1, events: [] }; // week starts with monday
   for (let i = 0; i < start.daysInMonth; i++) {
@@ -137,31 +128,13 @@ function Agenda() {
   }
   const month_start = monthStart(year, month);
   const month_end = monthStart(year, month + 1);
-  const { error, data } = useQuery<{ events: Event[] }>(
-    gql`
-      query ($language: String, $start: DateTime, $end: DateTime) {
-        events(where: { start: { lt: $end }, repeat_end: { gt: $start } }) {
-          id
-          label(language: $language)
-          discription(language: $language)
-          duration
-          start
-          repeat
-          repeat_end
-          exception {
-            id
-          }
-        }
-      }
-    `,
-    {
-      variables: {
-        language,
-        start: month_start.toInstant().toString(),
-        end: month_end.toInstant().toString(),
-      },
+  const { error, data } = useQuery(AGENDA_QUERY, {
+    variables: {
+      language,
+      start: month_start.toInstant().toString(),
+      end: month_end.toInstant().toString(),
     },
-  );
+  });
   if (error !== undefined) {
     console.error(JSON.stringify(error));
   }
@@ -171,9 +144,50 @@ function Agenda() {
   const days = calcMonth(month_start, month_end, data.events);
   return (
     <>
-      <article>
+      <article style={{ display: "flex", justifyContent: "space-between" }}>
         <h1>
-          {year}-{MONTH_NAMES[month - 1][language]}
+          <Link
+            className="link-button"
+            to={
+              "/" +
+              language +
+              "/agenda/" +
+              (month == 1 ? year - 1 : year) +
+              "-" +
+              (month == 1 ? 12 : month - 1)
+            }
+          >
+            &lt;
+          </Link>
+          {capitalize(MONTH_NAMES[month - 1][language])}
+          <Link
+            className="link-button"
+            to={
+              "/" +
+              language +
+              "/agenda/" +
+              (month == 12 ? year + 1 : year) +
+              "-" +
+              (month == 12 ? 1 : month + 1)
+            }
+          >
+            &gt;
+          </Link>
+        </h1>
+        <h1>
+          <Link
+            className="link-button"
+            to={"/" + language + "/agenda/" + (year - 1) + "-" + month}
+          >
+            &lt;
+          </Link>
+          {year}
+          <Link
+            className="link-button"
+            to={"/" + language + "/agenda/" + (year + 1) + "-" + month}
+          >
+            &gt;
+          </Link>
         </h1>
       </article>
       <div

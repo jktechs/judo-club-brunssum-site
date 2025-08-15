@@ -1,7 +1,7 @@
 import { useParams, useSearchParams } from "react-router-dom";
 import { capitalize, TEXT_MAP } from "../translation";
 
-function Success() {
+export default function Success() {
   const { language = "nl" } = useParams();
   const error = useSearchParams()[0].get("error");
   if (error === null) {
@@ -14,5 +14,3 @@ function Success() {
     );
   }
 }
-
-export default Success;

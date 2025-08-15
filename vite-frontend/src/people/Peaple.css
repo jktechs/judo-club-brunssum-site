@@ -1,0 +1,9 @@
+.split {
+    display: grid;
+    grid-template-columns: auto auto;
+}
+@media (max-width: 1023px) {
+    .split {
+        display: contents;
+    }
+}

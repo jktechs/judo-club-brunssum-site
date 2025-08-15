@@ -1,6 +1,5 @@
 img.logo {
     height: 4em;
-    /*height: calc(4em * 1.25779376);*/
     filter: brightness(0);
     margin: 0.25em;
 }
@@ -14,9 +13,6 @@ img.logo.small {
 [data-theme="dark"] img.logo {
     filter: brightness(0) saturate(100%) invert(92%) sepia(95%) saturate(4120%)
         hue-rotate(341deg) brightness(93%) contrast(106%);
-}
-[disabled] {
-    opacity: var(--pico-form-element-disabled-opacity);
 }
 header {
     background-image: url(/band2.jpg);
@@ -37,11 +33,23 @@ header > div {
     gap: 2em;
     justify-content: space-between;
 }
-
 nav details.dropdown {
     margin: 0px;
 }
-
+nav a {
+    margin: 0px;
+}
+a {
+    cursor: pointer;
+}
+.social-logo {
+    width: 4em;
+    padding: 0.5em;
+    filter: brightness(0);
+}
+[data-theme="dark"] .social-logo {
+    filter: none;
+}
 #menu-button {
     position: relative;
     top: 1.5em;
@@ -54,14 +62,7 @@ nav details.dropdown {
 #menu-button:checked {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231C212C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M4,4 l12,12 M4,16 l12,-12' /%3E%3C/svg%3E");
 }
-.split {
-    display: grid;
-    grid-template-columns: auto auto;
-}
 @media (max-width: 1023px) {
-    .split {
-        display: contents;
-    }
     img.logo.big {
         display: none;
     }
@@ -78,32 +79,5 @@ nav details.dropdown {
     }
     nav:has(+ #menu-button:not(:checked)) {
         display: none;
-    }
-    table,
-    tbody {
-        display: contents;
-        border-top: var(--pico-border-width) solid
-            var(--pico-table-border-color);
-        border-bottom: var(--pico-border-width) solid
-            var(--pico-table-border-color);
-    }
-    thead {
-        display: none;
-    }
-    td {
-        display: block;
-        border-bottom: 0px;
-        border-top: 0px;
-    }
-    tr {
-        display: block;
-        border-top: var(--pico-border-width) solid
-            var(--pico-table-border-color);
-        border-bottom: var(--pico-border-width) solid
-            var(--pico-table-border-color);
-    }
-    td::before {
-        content: attr(data-label);
-        margin-right: 1em;
     }
 }

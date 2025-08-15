@@ -1,23 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { useParams } from "react-router-dom";
+import "./InfoPage.css";
+import { INFO_PAGE_QUERY } from "../querys";
 
-function InfoPage() {
+export default function InfoPage() {
   const { language = "nl", slug = "home" } = useParams();
-  const { error, data } = useQuery<{
-    // eslint-disable-next-line
-    infoPage: { title: string; content: any } | null;
-  }>(
-    gql`
-      query ($language: String, $slug: String) {
-        infoPage(where: { slug: $slug }) {
-          title(language: $language)
-          content(language: $language)
-        }
-      }
-    `,
-    { variables: { language, slug } },
-  );
+  const { error, data } = useQuery(INFO_PAGE_QUERY, {
+    variables: { language, slug },
+  });
   if (error !== undefined) {
     console.error(JSON.stringify(error));
   }
@@ -47,4 +38,3 @@ function InfoPage() {
     return <article aria-busy="true" />;
   }
 }
-export default InfoPage;

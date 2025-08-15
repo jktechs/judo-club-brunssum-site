@@ -1,36 +1,16 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { getDuration } from "../agenda/Agenda";
 import { Temporal } from "@js-temporal/polyfill";
 import { capitalize, DAY_NAMES, TEXT_MAP } from "../translation";
+import "./Groups.css";
+import { GROUPS_QUERY } from "../querys";
 
-function Groups() {
+export default function Groups() {
   const { language = "nl" } = useParams();
-  const { error, data } = useQuery<{
-    groups: {
-      name: string;
-      price: string;
-      discription: string;
-      timeslots: { start: string; duration: string }[];
-    }[];
-  }>(
-    gql`
-      query ($language: String) {
-        groups {
-          name
-          price
-          discription(language: $language)
-          timeslots {
-            start
-            duration
-          }
-        }
-      }
-    `,
-    {
-      variables: { language },
-    },
-  );
+  const { error, data } = useQuery(GROUPS_QUERY, {
+    variables: { language },
+  });
   if (error !== undefined) {
     console.error(JSON.stringify(error));
   }
@@ -85,4 +65,3 @@ function Groups() {
     );
   }
 }
-export default Groups;

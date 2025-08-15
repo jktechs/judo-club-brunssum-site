@@ -1,0 +1,9 @@
+* {
+    --pico-table-border-color: #000;
+}
+[data-theme="dark"] * {
+    --pico-table-border-color: #fff;
+}
+thead th {
+    --pico-border-width: 1px !important;
+}

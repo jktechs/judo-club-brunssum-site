@@ -3,7 +3,7 @@ import "./App.css";
 import facebook from "./facebook.svg";
 import instagram from "./instagram.svg";
 import whatsapp from "./whatsapp.svg";
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import {
   Link,
   Navigate,
@@ -14,9 +14,10 @@ import {
 import { languages } from "../../../global";
 import useCookie from "../useCookie";
 import useTheme from "../useTheme";
+import { APP_QUERY } from "../querys";
 
 type MenuItem = { label: string; links: { label: string; href: string }[] };
-function App({ content }: { content?: React.ReactNode }) {
+export default function App({ content }: { content?: React.ReactNode }) {
   const preferdTheme = useTheme();
   const { cookie: themeCookie = preferdTheme, setCookie: setThemeCookie } =
     useCookie("theme");
@@ -24,38 +25,9 @@ function App({ content }: { content?: React.ReactNode }) {
   const location = useLocation();
   const start = location.pathname.substring(1).indexOf("/");
   const path = location.pathname.substring(start + 1);
-  const { error, data } = useQuery<{
-    menuItems: MenuItem[];
-    authenticatedItem: {
-      id: string;
-      name: string;
-      email: string;
-      admin: boolean;
-    } | null;
-  }>(
-    gql`
-      query ($language: String) {
-        menuItems(orderBy: { order: asc }) {
-          label(language: $language)
-          links {
-            label(language: $language)
-            href
-          }
-        }
-        authenticatedItem {
-          ... on User {
-            admin
-            email
-            id
-            name
-          }
-        }
-      }
-    `,
-    {
-      variables: { language },
-    },
-  );
+  const { error, data } = useQuery(APP_QUERY, {
+    variables: { language },
+  });
   if (!["en", "nl"].includes(language)) {
     if (start === -1) {
       return <Navigate to={"/"} />;
@@ -71,25 +43,17 @@ function App({ content }: { content?: React.ReactNode }) {
     <div data-theme={themeCookie}>
       <header>
         <div className="container">
-          <a href={"/" + language + "/info/home"}>
-            <img
-              src="/logo.png"
-              className="logo big"
-              style={{ margin: "10px" }}
-            />
-            <img
-              src="/logo-small.png"
-              className="logo small"
-              style={{ margin: "10px" }}
-            />
-          </a>
+          <Link to={"/" + language + "/info/home"}>
+            <img src="/logo.png" className="logo big" />
+            <img src="/logo-small.png" className="logo small" />
+          </Link>
           <nav>
             <ul />
             <ul>
               <li>
-                <a href={"/" + language + "/info/home"} className="secondary">
+                <Link to={"/" + language + "/info/home"} className="secondary">
                   Home
-                </a>
+                </Link>
               </li>
               {data !== undefined ? (
                 <NavBar
@@ -130,14 +94,13 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
         if (item.links.length == 1) {
           return (
             <li key={item.label}>
-              <a
+              <Link
                 role="button"
-                href={"/" + language + item.links[0].href}
+                to={"/" + language + item.links[0].href}
                 className="secondary outline"
-                style={{ margin: "0px" }}
               >
                 {item.links[0].label}
-              </a>
+              </Link>
             </li>
           );
         } else {
@@ -150,7 +113,7 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
                 <ul dir="rtl">
                   {item.links.map((link) => (
                     <li key={link.label}>
-                      <a href={"/" + language + link.href}>{link.label}</a>
+                      <Link to={"/" + language + link.href}>{link.label}</Link>
                     </li>
                   ))}
                 </ul>
@@ -167,7 +130,7 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
           <ul dir="rtl">
             {languages.map((language) => (
               <li key={language.code}>
-                <a href={"/" + language.code + path}>{language.name}</a>
+                <Link to={"/" + language.code + path}>{language.name}</Link>
               </li>
             ))}
           </ul>
@@ -180,18 +143,12 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
           </summary>
           <ul dir="rtl">
             <li>
-              <a
-                onClick={() => setThemeCookie("light")}
-                style={{ cursor: "pointer" }}
-              >
+              <a onClick={() => setThemeCookie("light")}>
                 {capitalize(TEXT_MAP["light"][language])}
               </a>
             </li>
             <li>
-              <a
-                onClick={() => setThemeCookie("dark")}
-                style={{ cursor: "pointer" }}
-              >
+              <a onClick={() => setThemeCookie("dark")}>
                 {capitalize(TEXT_MAP["dark"][language])}
               </a>
             </li>
@@ -210,22 +167,13 @@ function Footer() {
             <hgroup>
               <h6>Social media</h6>
               <Link to="https://www.facebook.com/JCBrunssum/">
-                <img
-                  src={facebook}
-                  style={{ width: "4em", padding: "0.5em" }}
-                />
+                <img className="social-logo" src={facebook} />
               </Link>
               <Link to="https://www.instagram.com/judoclub_brunssum/">
-                <img
-                  src={instagram}
-                  style={{ width: "4em", padding: "0.5em" }}
-                />
+                <img className="social-logo" src={instagram} />
               </Link>
               <Link to="#">
-                <img
-                  src={whatsapp}
-                  style={{ width: "4em", padding: "0.5em" }}
-                />
+                <img className="social-logo" src={whatsapp} />
               </Link>
             </hgroup>
           </article>
@@ -269,5 +217,3 @@ function Footer() {
     </>
   );
 }
-
-export default App;

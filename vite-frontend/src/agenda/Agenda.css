@@ -1,4 +1,29 @@
 @media (max-width: 1023px) {
+    table,
+    tbody {
+        display: contents;
+        border-top: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+        border-bottom: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+    }
+    thead {
+        display: none;
+    }
+    td {
+        display: block;
+        border-bottom: 0px;
+        border-top: 0px;
+    }
+    tr {
+        display: block;
+        border-bottom: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+    }
+    td::before {
+        content: attr(data-label);
+        margin-right: 1em;
+    }
     article.calander-day {
         aspect-ratio: 0.71; /* ~sqrt(2) */
     }
@@ -8,8 +33,15 @@
     aspect-ratio: 1;
     margin: 0 2% 4% 2%;
     overflow: hidden;
+    cursor: pointer;
 }
 dialog:modal {
     max-width: 100vw;
     max-height: 100vw;
+}
+.link-button {
+    text-decoration-line: none;
+}
+[disabled] {
+    opacity: var(--pico-form-element-disabled-opacity);
 }
