@@ -14,10 +14,10 @@ import {
 import { languages } from "../../../global";
 import useCookie from "../useCookie";
 import useTheme from "../useTheme";
-import { APP_QUERY } from "../querys";
+import { APP_QUERY } from "../queries";
 
 type MenuItem = { label: string; links: { label: string; href: string }[] };
-export default function App({ content }: { content?: React.ReactNode }) {
+export default function App() {
   const preferdTheme = useTheme();
   const { cookie: themeCookie = preferdTheme, setCookie: setThemeCookie } =
     useCookie("theme");
@@ -71,7 +71,7 @@ export default function App({ content }: { content?: React.ReactNode }) {
         </div>
       </header>
       <main className="container">
-        {content !== undefined ? <>{content}</> : <Outlet />}
+        <Outlet />
       </main>
       <footer className="container">
         <nav>
@@ -122,7 +122,7 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
           );
         }
       })}
-      <li>
+      {/*<li>
         <details className="dropdown">
           <summary role="button" className="outline">
             {capitalize(TEXT_MAP["language"][language])}
@@ -154,6 +154,40 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
             </li>
           </ul>
         </details>
+      </li>*/}
+      <li>
+        <details className="dropdown">
+          <summary role="button" className="outline">
+            O
+          </summary>
+          <ul dir="rtl">
+            <li>
+              <details className="nested-dropdown">
+                <summary style={{ width: "max-content" }}>
+                  {capitalize(TEXT_MAP["theme"][language])}
+                </summary>
+                <a onClick={() => setThemeCookie("light")}>
+                  {capitalize(TEXT_MAP["light"][language])}
+                </a>
+                <a onClick={() => setThemeCookie("dark")}>
+                  {capitalize(TEXT_MAP["dark"][language])}
+                </a>
+              </details>
+            </li>
+            <li>
+              <details className="nested-dropdown">
+                <summary style={{ width: "max-content" }}>
+                  {capitalize(TEXT_MAP["language"][language])}
+                </summary>
+                {languages.map((language) => (
+                  <Link key={language.code} to={"/" + language.code + path}>
+                    {language.name}
+                  </Link>
+                ))}
+              </details>
+            </li>
+          </ul>
+        </details>
       </li>
     </>
   );
@@ -161,59 +195,47 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
 function Footer() {
   return (
     <>
-      <ul>
-        <li>
-          <article>
-            <hgroup>
-              <h6>Social media</h6>
-              <Link to="https://www.facebook.com/JCBrunssum/">
-                <img className="social-logo" src={facebook} />
-              </Link>
-              <Link to="https://www.instagram.com/judoclub_brunssum/">
-                <img className="social-logo" src={instagram} />
-              </Link>
-              <Link to="#">
-                <img className="social-logo" src={whatsapp} />
-              </Link>
-            </hgroup>
-          </article>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <article>
-            <hgroup>
-              <h6>Contact gegevens</h6>
-              <p>
-                Regentessestraat 47, 6441 GD Brunssum
-                <br />
-                {"Telefoon: "}
-                <a href="tel:0031622433444">06 - 22 43 34 44</a>
-                <br />
-                {"Email: "}
-                <a href="mailto:info@judoclubbrunssum.n">
-                  info@judoclubbrunssum.nl
-                </a>
-              </p>
-            </hgroup>
-          </article>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <article>
-            <hgroup>
-              <h6>Sporthal gegevens</h6>
-              <p>
-                Heugerstraat 2A, 6443 BS Brunssum
-                <br />
-                {"Telefoon: "}
-                <a href="tel:0031455270016">045 - 52 700 16</a>
-              </p>
-            </hgroup>
-          </article>
-        </li>
-      </ul>
+      <article>
+        <hgroup>
+          <h6>Social media</h6>
+          <Link to="https://www.facebook.com/JCBrunssum/">
+            <img className="social-logo" src={facebook} />
+          </Link>
+          <Link to="https://www.instagram.com/judoclub_brunssum/">
+            <img className="social-logo" src={instagram} />
+          </Link>
+          <Link to="#">
+            <img className="social-logo" src={whatsapp} />
+          </Link>
+        </hgroup>
+      </article>
+      <article>
+        <hgroup>
+          <h6>Contact gegevens</h6>
+          <p>
+            Regentessestraat 47, 6441 GD Brunssum
+            <br />
+            {"Telefoon: "}
+            <a href="tel:0031622433444">06 - 22 43 34 44</a>
+            <br />
+            {"Email: "}
+            <a href="mailto:info@judoclubbrunssum.n">
+              info@judoclubbrunssum.nl
+            </a>
+          </p>
+        </hgroup>
+      </article>
+      <article>
+        <hgroup>
+          <h6>Sporthal gegevens</h6>
+          <p>
+            Heugerstraat 2A, 6443 BS Brunssum
+            <br />
+            {"Telefoon: "}
+            <a href="tel:0031455270016">045 - 52 700 16</a>
+          </p>
+        </hgroup>
+      </article>
     </>
   );
 }

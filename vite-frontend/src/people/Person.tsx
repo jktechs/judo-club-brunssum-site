@@ -1,7 +1,7 @@
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { capitalize, ROLE_NAMES } from "../translation";
 import { useQuery } from "@apollo/client";
-import { PERSON_QUERY } from "../querys";
+import { PERSON_QUERY } from "../queries";
 
 export default function Person({
   language,

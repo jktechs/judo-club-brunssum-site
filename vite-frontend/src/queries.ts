@@ -165,3 +165,53 @@ export const PERSON_LIST_QUERY: TypedDocumentNode<
     }
   }
 `;
+export const DOWNLOAD_QUERY: TypedDocumentNode<
+  {
+    downloads: {
+      section: string;
+      label: string;
+      file: {
+        url: string;
+      };
+    }[];
+  },
+  {
+    language: string;
+  }
+> = gql`
+  query Test($language: String) {
+    downloads {
+      section
+      label(language: $language)
+      file {
+        url
+      }
+    }
+  }
+`;
+export const LOGIN_MUTATION: TypedDocumentNode<
+  | {
+      authenticateUserWithPassword: {
+        sessionToken: string;
+        item: { admin: boolean; id: string; name: string };
+      };
+    }
+  | { UserAuthenticationWithPasswordFailure: { message: string } },
+  { email: string; password: string }
+> = gql`
+  mutation ($email: String!, $password: String!) {
+    authenticateUserWithPassword(email: $email, password: $password) {
+      ... on UserAuthenticationWithPasswordSuccess {
+        sessionToken
+        item {
+          admin
+          id
+          name
+        }
+      }
+      ... on UserAuthenticationWithPasswordFailure {
+        message
+      }
+    }
+  }
+`;

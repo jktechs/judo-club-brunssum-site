@@ -187,6 +187,7 @@ export const lists = {
     access: protect,
     fields: {
       label: translatedText({}),
+      section: text({}),
       file: file({
         storage: "local-files",
       }),

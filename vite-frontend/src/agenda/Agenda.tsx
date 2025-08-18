@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client";
 import { Temporal } from "@js-temporal/polyfill";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { capitalize, MONTH_NAMES } from "../translation";
-import { AGENDA_QUERY, type QueryResult } from "../querys";
+import { AGENDA_QUERY, type QueryResult } from "../queries";
 
 function opendialog(event: MouseEvent) {
   const dialog = event.currentTarget.querySelector("dialog");

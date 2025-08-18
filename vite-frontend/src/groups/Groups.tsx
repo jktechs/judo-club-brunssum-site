@@ -4,7 +4,7 @@ import { getDuration } from "../agenda/Agenda";
 import { Temporal } from "@js-temporal/polyfill";
 import { capitalize, DAY_NAMES, TEXT_MAP } from "../translation";
 import "./Groups.css";
-import { GROUPS_QUERY } from "../querys";
+import { GROUPS_QUERY } from "../queries";
 
 export default function Groups() {
   const { language = "nl" } = useParams();

@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { useParams } from "react-router-dom";
 import "./InfoPage.css";
-import { INFO_PAGE_QUERY } from "../querys";
+import { INFO_PAGE_QUERY } from "../queries";
 
 export default function InfoPage() {
   const { language = "nl", slug = "home" } = useParams();
