@@ -6,6 +6,9 @@ img.logo {
 img.logo.big {
     display: inline;
 }
+#google-captcha iframe {
+    border-radius: 4px;
+}
 img.logo.small {
     display: none;
 }

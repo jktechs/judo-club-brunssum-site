@@ -13,8 +13,9 @@ import {
 } from "react-router-dom";
 import { languages } from "../../../global";
 import useCookie from "../useCookie";
-import useTheme from "../useTheme";
+import useTheme, { type Theme } from "../useTheme";
 import { APP_QUERY } from "../queries";
+import GoogleProvider from "./GoogleProvider";
 
 type MenuItem = { label: string; links: { label: string; href: string }[] };
 export default function App() {
@@ -39,46 +40,51 @@ export default function App() {
     console.error(JSON.stringify(error));
   }
   return (
-    // themeCookie
-    <div data-theme={themeCookie}>
-      <header>
-        <div className="container">
-          <Link to={"/" + language + "/info/home"}>
-            <img src="/logo.png" className="logo big" />
-            <img src="/logo-small.png" className="logo small" />
-          </Link>
+    <GoogleProvider language={language} theme={themeCookie as Theme}>
+      <div data-theme={themeCookie}>
+        <header>
+          <div className="container">
+            <Link to={"/" + language + "/info/home"}>
+              <img src="/logo.png" className="logo big" />
+              <img src="/logo-small.png" className="logo small" />
+            </Link>
+            <nav>
+              <ul />
+              <ul>
+                <li>
+                  <Link
+                    to={"/" + language + "/info/home"}
+                    className="secondary"
+                  >
+                    Home
+                  </Link>
+                </li>
+                {data !== undefined ? (
+                  <NavBar
+                    language={language}
+                    menuItems={data.menuItems}
+                    path={path}
+                    setThemeCookie={setThemeCookie}
+                  />
+                ) : (
+                  <article aria-busy="true" />
+                )}
+              </ul>
+            </nav>
+            <input id="menu-button" type="checkbox" />
+          </div>
+        </header>
+        <main className="container">
+          <Outlet />
+        </main>
+        <footer className="container">
           <nav>
-            <ul />
-            <ul>
-              <li>
-                <Link to={"/" + language + "/info/home"} className="secondary">
-                  Home
-                </Link>
-              </li>
-              {data !== undefined ? (
-                <NavBar
-                  language={language}
-                  menuItems={data.menuItems}
-                  path={path}
-                  setThemeCookie={setThemeCookie}
-                />
-              ) : (
-                <article aria-busy="true" />
-              )}
-            </ul>
+            <Footer />
           </nav>
-          <input id="menu-button" type="checkbox" />
-        </div>
-      </header>
-      <main className="container">
-        <Outlet />
-      </main>
-      <footer className="container">
-        <nav>
-          <Footer />
-        </nav>
-      </footer>
-    </div>
+        </footer>
+      </div>
+      <div id="google-captcha" />
+    </GoogleProvider>
   );
 }
 type NavBarProps = {

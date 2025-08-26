@@ -1,15 +1,49 @@
 import { useParams } from "react-router-dom";
 import { capitalize, TEXT_MAP } from "../translation";
 import "./Contact.css";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { useMutation } from "@apollo/client";
+import { CONTACT_MUTATION } from "../queries";
+import type React from "react";
+import Success from "./Success";
 
 export default function Contact() {
   const { language = "nl" } = useParams();
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [contact, { data }] = useMutation(CONTACT_MUTATION);
+  if (data) {
+    return <Success></Success>;
+  }
+  async function send(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (executeRecaptcha === undefined) {
+      return;
+    }
+    const formData = new FormData(event.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const week = formData.get("week") as string;
+    const message = formData.get("message") as string;
+    const language = formData.get("language") as string;
+    const token = await executeRecaptcha();
+    contact({ variables: { email, language, message, name, week, token } });
+  }
+
+  // eslint-disable-next-line
+  (window as Record<string, any>)["execute"] = executeRecaptcha;
+  // eslint-disable-next-line
+  (window as Record<string, any>)["contact"] = contact;
   return (
     <>
       <article>{"Contact:"}</article>
       <article>
-        <form action={"/api/contact"} method="POST">
+        <form onSubmit={send}>
           <input type="hidden" name="language" value={language} />
+          <input
+            type="week"
+            name="week"
+            style={{ width: "1px", height: "1px" }}
+          ></input>
           <div style={{ display: "flex" }}>
             <input
               type="text"

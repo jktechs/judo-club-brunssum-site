@@ -189,6 +189,35 @@ export const DOWNLOAD_QUERY: TypedDocumentNode<
     }
   }
 `;
+export const CONTACT_MUTATION: TypedDocumentNode<
+  boolean,
+  {
+    name: string;
+    email: string;
+    message: string;
+    token: string;
+    language: string;
+    week: string;
+  }
+> = gql`
+  mutation (
+    $name: String!
+    $email: String!
+    $message: String!
+    $token: String!
+    $language: String!
+    $week: String!
+  ) {
+    submitContact(
+      name: $name
+      email: $email
+      message: $message
+      token: $token
+      language: $language
+      week: $week
+    )
+  }
+`;
 export const LOGIN_MUTATION: TypedDocumentNode<
   | {
       authenticateUserWithPassword: {

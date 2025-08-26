@@ -14,7 +14,7 @@ import { TEXT_MAP } from "./translation.ts";
 import { ErrorBoundary } from "react-error-boundary";
 import Split from "./Split.tsx";
 
-// import App from "./app/App.tsx";
+import App from "./app/App.tsx";
 // import Agenda from "./agenda/Agenda.tsx";
 // import Groups from "./groups/Groups.tsx";
 // import InfoPage from "./info_page/InfoPage.tsx";
@@ -35,14 +35,12 @@ const NotFound = () => {
 };
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ErrorBoundary
-      fallbackRender={(e) => <p>error: {JSON.stringify(e.error)}</p>}
-    >
+    <ErrorBoundary fallbackRender={(e) => <p>error: {e.error.toString()}</p>}>
       <ApolloProvider client={CLIENT}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/nl/info/home" />} />
-            <Route path="/:language" element={<Split module="App" />}>
+            <Route path="/:language" element={<App />}>
               <Route index element={<Navigate to="info/home" />} />
               <Route path="info" element={<Outlet />}>
                 <Route index element={<Navigate to="home" />} />
