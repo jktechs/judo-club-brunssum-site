@@ -7,3 +7,30 @@
 thead th {
     --pico-border-width: 1px !important;
 }
+@media (max-width: 1023px) {
+    table,
+    tbody {
+        display: contents;
+        border-top: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+        border-bottom: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+    }
+    thead {
+        display: none;
+    }
+    td {
+        display: block;
+        border-bottom: 0px;
+        border-top: 0px;
+    }
+    tr {
+        display: block;
+        border-bottom: var(--pico-border-width) solid
+            var(--pico-table-border-color);
+    }
+    td::before {
+        content: attr(data-label);
+        margin-right: 1em;
+    }
+}

@@ -3,6 +3,8 @@ import "./App.css";
 import facebook from "./facebook.svg";
 import instagram from "./instagram.svg";
 import whatsapp from "./whatsapp.svg";
+import language_icon from "./language.svg";
+import theme_icon from "./theme.svg";
 import { useQuery } from "@apollo/client";
 import {
   Link,
@@ -43,36 +45,30 @@ export default function App() {
     <GoogleProvider language={language} theme={themeCookie as Theme}>
       <div data-theme={themeCookie}>
         <header>
-          <div className="container">
+          <nav className="container">
             <Link to={"/" + language + "/info/home"}>
-              <img src="/logo.png" className="logo big" />
-              <img src="/logo-small.png" className="logo small" />
+              <img src="/logo.png" className="logo icon big" />
+              <img src="/logo-small.png" className="logo icon small" />
             </Link>
-            <nav>
-              <ul />
-              <ul>
-                <li>
-                  <Link
-                    to={"/" + language + "/info/home"}
-                    className="secondary"
-                  >
-                    Home
-                  </Link>
-                </li>
-                {data !== undefined ? (
-                  <NavBar
-                    language={language}
-                    menuItems={data.menuItems}
-                    path={path}
-                    setThemeCookie={setThemeCookie}
-                  />
-                ) : (
-                  <article aria-busy="true" />
-                )}
-              </ul>
-            </nav>
+            <ul id="navbar">
+              <li>
+                <Link to={"/" + language + "/info/home"} className="secondary">
+                  Home
+                </Link>
+              </li>
+              {data !== undefined ? (
+                <NavBar
+                  language={language}
+                  menuItems={data.menuItems}
+                  path={path}
+                  setThemeCookie={setThemeCookie}
+                />
+              ) : (
+                <article aria-busy="true" />
+              )}
+            </ul>
             <input id="menu-button" type="checkbox" />
-          </div>
+          </nav>
         </header>
         <main className="container">
           <Outlet />
@@ -128,10 +124,10 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
           );
         }
       })}
-      {/*<li>
+      <li>
         <details className="dropdown">
           <summary role="button" className="outline">
-            {capitalize(TEXT_MAP["language"][language])}
+            <img className="icon" src={language_icon} />
           </summary>
           <ul dir="rtl">
             {languages.map((language) => (
@@ -145,7 +141,7 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
       <li>
         <details className="dropdown">
           <summary role="button" className="outline">
-            {capitalize(TEXT_MAP["theme"][language])}
+            <img className="icon" src={theme_icon} />
           </summary>
           <ul dir="rtl">
             <li>
@@ -160,12 +156,10 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
             </li>
           </ul>
         </details>
-      </li>*/}
-      <li>
+      </li>
+      {/*<li>
         <details className="dropdown">
-          <summary role="button" className="outline">
-            O
-          </summary>
+          <summary role="button" className="outline"></summary>
           <ul dir="rtl">
             <li>
               <details className="nested-dropdown">
@@ -194,7 +188,7 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
             </li>
           </ul>
         </details>
-      </li>
+      </li>*/}
     </>
   );
 }

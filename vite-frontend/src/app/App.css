@@ -1,6 +1,5 @@
 img.logo {
     height: 4em;
-    filter: brightness(0);
     margin: 0.25em;
 }
 img.logo.big {
@@ -13,9 +12,12 @@ img.logo.small {
     display: none;
 }
 /* defines the color of the dark themed logo. https://angel-rs.github.io/css-color-filter-generator/ with #f2df0d */
-[data-theme="dark"] img.logo {
+[data-theme="dark"] img.icon {
     filter: brightness(0) saturate(100%) invert(92%) sepia(95%) saturate(4120%)
         hue-rotate(341deg) brightness(93%) contrast(106%);
+}
+img.icon {
+    filter: brightness(0);
 }
 header {
     background-image: url(/band2.jpg);
@@ -65,6 +67,9 @@ a {
 #menu-button:checked {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231C212C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M4,4 l12,12 M4,16 l12,-12' /%3E%3C/svg%3E");
 }
+/*#navbar {
+    display: ;
+}*/
 @media (max-width: 1023px) {
     img.logo.big {
         display: none;
@@ -72,15 +77,19 @@ a {
     img.logo.small {
         display: inline;
     }
-    nav,
+    /*nav,
     nav ul {
         flex-direction: column;
         align-items: flex-start;
-    }
+    }*/
     #menu-button {
         display: block;
     }
-    nav:has(+ #menu-button:not(:checked)) {
+    #navbar {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    #navbar:has(+ #menu-button:not(:checked)) {
         display: none;
     }
 }

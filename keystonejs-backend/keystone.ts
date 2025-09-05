@@ -12,7 +12,6 @@ import express from "express";
 import path from "path";
 import { createTransport } from "nodemailer";
 import { MailOptions } from "nodemailer/lib/smtp-transport";
-import { password } from "@keystone-6/core/fields";
 
 function getClientIP(req: any): string | undefined {
   // x-forwarded-for may be a comma-separated list if multiple proxies
@@ -146,10 +145,10 @@ export default withAuth(
                 { name, email, message, token, language, week },
                 context,
               ) => {
-                let ip = getClientIP(context.req);
                 if (week !== "") {
                   throw new Error("Malformed request");
                 }
+                let ip = getClientIP(context.req);
                 let resp = await fetch(
                   "https://www.google.com/recaptcha/api/siteverify?secret=" +
                     encodeURIComponent(google_secret) +
@@ -191,14 +190,18 @@ export default withAuth(
                     text: message,
                     html: message.replace(/\n/g, "<br>"),
                   };
-                  await new Promise((res, rej) => {
-                    EMAIL_CLIENT.sendMail(options, (err, info) => {
-                      if (err != null) {
-                        rej(err);
-                      }
-                      res(info);
+                  try {
+                    await new Promise((res, rej) => {
+                      EMAIL_CLIENT.sendMail(options, (err, info) => {
+                        if (err != null) {
+                          rej(err);
+                        }
+                        res(info);
+                      });
                     });
-                  });
+                  } catch {
+                    return false;
+                  }
                 }
                 return success;
               },

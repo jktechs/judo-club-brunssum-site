@@ -29,10 +29,10 @@ export default function Contact() {
     contact({ variables: { email, language, message, name, week, token } });
   }
 
-  // eslint-disable-next-line
-  (window as Record<string, any>)["execute"] = executeRecaptcha;
-  // eslint-disable-next-line
-  (window as Record<string, any>)["contact"] = contact;
+  // // eslint-disable-next-line
+  // (window as Record<string, any>)["execute"] = executeRecaptcha;
+  // // eslint-disable-next-line
+  // (window as Record<string, any>)["contact"] = contact;
   return (
     <>
       <article>{"Contact:"}</article>
@@ -42,8 +42,18 @@ export default function Contact() {
           <input
             type="week"
             name="week"
-            style={{ width: "1px", height: "1px" }}
-          ></input>
+            tabIndex={-1}
+            autoComplete="off"
+            style={{
+              position: "absolute",
+              left: "-100%",
+              top: "auto",
+              width: "1px",
+              height: "1px",
+              overflow: "hidden",
+            }}
+            aria-hidden="true"
+          />
           <div style={{ display: "flex" }}>
             <input
               type="text"
