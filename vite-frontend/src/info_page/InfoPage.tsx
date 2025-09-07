@@ -16,7 +16,9 @@ export default function InfoPage() {
     if (data.infoPage !== null) {
       return (
         <>
-          <article>{data.infoPage.title}</article>
+          <article>
+            <h1>{data.infoPage.title}</h1>
+          </article>
           <article>
             <DocumentRenderer document={data.infoPage.content} />
           </article>

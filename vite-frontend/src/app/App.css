@@ -19,6 +19,9 @@ img.logo.small {
 img.icon {
     filter: brightness(0);
 }
+.no-shrink {
+    flex-shrink: 0;
+}
 header {
     background-image: url(/band2.jpg);
     border-bottom: 1px solid #000000;
@@ -70,7 +73,7 @@ a {
 /*#navbar {
     display: ;
 }*/
-@media (max-width: 1023px) {
+@media (max-width: 1203px) {
     img.logo.big {
         display: none;
     }

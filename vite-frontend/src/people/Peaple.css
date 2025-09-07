@@ -2,7 +2,7 @@
     display: grid;
     grid-template-columns: auto auto;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1203px) {
     .split {
         display: contents;
     }
