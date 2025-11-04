@@ -138,10 +138,16 @@ function Agenda() {
   if (error !== undefined) {
     console.error(JSON.stringify(error));
   }
+  let days: Month;
   if (data === undefined) {
-    return <article aria-busy="true" />;
+    days = { padding: 0, events: [] };
+    for (let i = 0; i < 30; i++) {
+      days.events.push([]);
+    }
+    // return <article aria-busy="true" />;
+  } else {
+    days = calcMonth(month_start, month_end, data.events);
   }
-  const days = calcMonth(month_start, month_end, data.events);
   return (
     <>
       <article style={{ display: "flex", justifyContent: "space-between" }}>

@@ -12,7 +12,7 @@ export default function Contact() {
   const { executeRecaptcha } = useGoogleReCaptcha();
   const [contact, { data }] = useMutation(CONTACT_MUTATION);
   if (data) {
-    return <Success></Success>;
+    return <Success />;
   }
   async function send(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();

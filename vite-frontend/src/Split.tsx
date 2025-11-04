@@ -10,6 +10,7 @@ const modules = {
   People: lazy(() => import("./people/People")),
   Success: lazy(() => import("./contact/Success")),
   Login: lazy(() => import("./login/Login")),
+  Account: lazy(() => import("./Account")),
 };
 
 export default function Split({ module }: { module: keyof typeof modules }) {

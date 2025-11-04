@@ -108,54 +108,62 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
         } else {
           return (
             <li key={item.label}>
-              <details className="dropdown" key={item.label}>
-                <summary role="button" className="secondary outline">
-                  {item.label}
-                </summary>
-                <ul dir="rtl">
-                  {item.links.map((link) => (
-                    <li key={link.label}>
-                      <Link to={"/" + language + link.href}>{link.label}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </details>
+              <div style={{ display: "block", position: "relative" }}>
+                <details className="dropdown" key={item.label}>
+                  <summary role="button" className="secondary outline">
+                    {item.label}
+                  </summary>
+                  <ul dir="rtl">
+                    {item.links.map((link) => (
+                      <li key={link.label}>
+                        <Link to={"/" + language + link.href}>
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </div>
             </li>
           );
         }
       })}
       <li>
-        <details className="dropdown">
-          <summary role="button" className="outline">
-            <img className="icon" src={language_icon} />
-          </summary>
-          <ul dir="rtl">
-            {languages.map((language) => (
-              <li key={language.code}>
-                <Link to={"/" + language.code + path}>{language.name}</Link>
-              </li>
-            ))}
-          </ul>
-        </details>
+        <div style={{ display: "block", position: "relative" }}>
+          <details className="dropdown">
+            <summary role="button" className="outline">
+              <img className="icon" src={language_icon} />
+            </summary>
+            <ul dir="rtl">
+              {languages.map((language) => (
+                <li key={language.code}>
+                  <Link to={"/" + language.code + path}>{language.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </details>
+        </div>
       </li>
       <li>
-        <details className="dropdown">
-          <summary role="button" className="outline">
-            <img className="icon" src={theme_icon} />
-          </summary>
-          <ul dir="rtl">
-            <li>
-              <a onClick={() => setThemeCookie("light")}>
-                {capitalize(TEXT_MAP["light"][language])}
-              </a>
-            </li>
-            <li>
-              <a onClick={() => setThemeCookie("dark")}>
-                {capitalize(TEXT_MAP["dark"][language])}
-              </a>
-            </li>
-          </ul>
-        </details>
+        <div style={{ display: "block", position: "relative" }}>
+          <details className="dropdown">
+            <summary role="button" className="outline">
+              <img className="icon" src={theme_icon} />
+            </summary>
+            <ul dir="rtl">
+              <li>
+                <a onClick={() => setThemeCookie("light")}>
+                  {capitalize(TEXT_MAP["light"][language])}
+                </a>
+              </li>
+              <li>
+                <a onClick={() => setThemeCookie("dark")}>
+                  {capitalize(TEXT_MAP["dark"][language])}
+                </a>
+              </li>
+            </ul>
+          </details>
+        </div>
       </li>
       {/*<li>
         <details className="dropdown">

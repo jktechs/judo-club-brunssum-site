@@ -55,6 +55,7 @@ createRoot(document.getElementById("root")!).render(
               <Route path="downloads" element={<Split module="Downloads" />} />
               <Route path="people" element={<Split module="People" />} />
               <Route path="login" element={<Split module="Login" />} />
+              <Route path="account" element={<Split module="Account" />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

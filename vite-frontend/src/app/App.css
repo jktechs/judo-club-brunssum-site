@@ -38,9 +38,6 @@ header > div {
     gap: 2em;
     justify-content: space-between;
 }
-nav details.dropdown {
-    margin: 0px;
-}
 nav a {
     margin: 0px;
 }
@@ -67,9 +64,6 @@ a {
 #menu-button:checked {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231C212C' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath fill='currentColor' d='M4,4 l12,12 M4,16 l12,-12' /%3E%3C/svg%3E");
 }
-/*#navbar {
-    display: ;
-}*/
 @media (max-width: 1023px) {
     img.logo.big {
         display: none;

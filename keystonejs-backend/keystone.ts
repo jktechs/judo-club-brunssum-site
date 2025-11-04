@@ -213,6 +213,7 @@ export default withAuth(
     server: {
       cors: {
         origin: [
+          "http://192.168.178.130:3000",
           "http://localhost:5174",
           "http://localhost:3000",
           "https://portfolio.jannickkoppe.site",

@@ -1,4 +1,8 @@
 type LanguageMap = { [key: string]: string };
+export const LOGIN_ERROR: LanguageMap = {
+  en: "Invalid email or password.",
+  nl: "Ongeldige email of wachtwoord.",
+};
 export const MONTH_NAMES: LanguageMap[] = [
   { en: "january", nl: "januari" },
   { en: "february", nl: "februari" },

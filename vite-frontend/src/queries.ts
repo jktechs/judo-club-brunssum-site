@@ -219,13 +219,14 @@ export const CONTACT_MUTATION: TypedDocumentNode<
   }
 `;
 export const LOGIN_MUTATION: TypedDocumentNode<
-  | {
-      authenticateUserWithPassword: {
-        sessionToken: string;
-        item: { admin: boolean; id: string; name: string };
-      };
-    }
-  | { UserAuthenticationWithPasswordFailure: { message: string } },
+  {
+    authenticateUserWithPassword:
+      | {
+          sessionToken: string;
+          item: { admin: boolean; id: string; name: string };
+        }
+      | { message: string };
+  },
   { email: string; password: string }
 > = gql`
   mutation ($email: String!, $password: String!) {
