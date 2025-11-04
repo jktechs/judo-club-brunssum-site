@@ -2,7 +2,9 @@ import "./Login.css";
 export default function Login() {
   return (
     <>
-      <article>{"Login:"}</article>
+      <article>
+        <h1>{"Login"}</h1>
+      </article>
       <article>
         <form
           onSubmit={(e) => {

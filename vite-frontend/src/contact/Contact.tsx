@@ -35,7 +35,9 @@ export default function Contact() {
   // (window as Record<string, any>)["contact"] = contact;
   return (
     <>
-      <article>{"Contact:"}</article>
+      <article>
+        <h1>{"Contact"}</h1>
+      </article>
       <article>
         <form onSubmit={send}>
           <input type="hidden" name="language" value={language} />

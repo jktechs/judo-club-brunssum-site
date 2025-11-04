@@ -1,4 +1,4 @@
-@media (max-width: 1023px) {
+@media (max-width: 1203px) {
     article.calander-day {
         aspect-ratio: 0.71; /* ~sqrt(2) */
     }
