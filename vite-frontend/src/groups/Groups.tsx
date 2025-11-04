@@ -23,6 +23,13 @@ export default function Groups() {
           <h1>{capitalize(TEXT_MAP["groups"][language])}</h1>
         </article>
         <article>
+          <p>
+            Hieronder vind je de lestijden en de groepsindeling. De leeftijden
+            die genoemd staan, zijn grove richtlijnen. De daadwerkelijke
+            indeling wordt door de trainers op individuele basis gemaakt, om
+            ervoor te zorgen dat iedereen op zijn/haar eigen niveau kan trainen
+            en voldoende uitgedaagd wordt.
+          </p>
           <table>
             <thead>
               <tr>
@@ -38,7 +45,12 @@ export default function Groups() {
                   <tr key={group.name}>
                     <td data-label="Name">{group.name}</td>
                     <td data-label="Disc.">{group.discription}</td>
-                    <td data-label="Price">{"€" + group.price}</td>
+                    <td data-label="Price">
+                      {"€" +
+                        (Math.round(Number(group.price) * 100) / 100).toFixed(
+                          2,
+                        )}
+                    </td>
                     <td data-label="Timeslots">
                       {group.timeslots.map((timeslot) => {
                         const [hour, minute] = timeslot.duration
