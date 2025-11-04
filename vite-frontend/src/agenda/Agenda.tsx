@@ -150,6 +150,9 @@ function Agenda() {
   }
   return (
     <>
+      <article>
+        <h1>{"Agenda"}</h1>
+      </article>
       <article style={{ display: "flex", justifyContent: "space-between" }}>
         <h1>
           <Link
@@ -223,7 +226,7 @@ function Agenda() {
                 })}
               </div>
               <dialog>
-                <div className="container">
+                <div className="container-fluid" style={{ width: "80vw" }}>
                   <article>
                     <h1>
                       {year}-{month}-{i + 1}

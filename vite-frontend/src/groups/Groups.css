@@ -7,7 +7,7 @@
 thead th {
     --pico-border-width: 1px !important;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1203px) {
     table,
     tbody {
         display: contents;

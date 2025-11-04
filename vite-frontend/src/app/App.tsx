@@ -45,8 +45,8 @@ export default function App() {
     <GoogleProvider language={language} theme={themeCookie as Theme}>
       <div data-theme={themeCookie}>
         <header>
-          <nav className="container">
-            <Link to={"/" + language + "/info/home"}>
+          <nav className="container-fluid" style={{ width: "80vw" }}>
+            <Link to={"/" + language + "/info/home"} className="no-shrink">
               <img src="/logo.png" className="logo icon big" />
               <img src="/logo-small.png" className="logo icon small" />
             </Link>
@@ -67,13 +67,13 @@ export default function App() {
                 <article aria-busy="true" />
               )}
             </ul>
-            <input id="menu-button" type="checkbox" />
+            <input id="menu-button" type="checkbox" className="no-shrink" />
           </nav>
         </header>
-        <main className="container">
+        <main className="container-fluid" style={{ width: "80vw" }}>
           <Outlet />
         </main>
-        <footer className="container">
+        <footer className="container-fluid" style={{ width: "80vw" }}>
           <nav>
             <Footer />
           </nav>
