@@ -65,6 +65,9 @@ export const lists = {
       }),
       password: password({}),
     },
+    ui: {
+      isHidden: ({ session }) => !isAdmin({ session }),
+    },
   }),
   // Peaple in the organisation.
   Person: list({
@@ -78,6 +81,9 @@ export const lists = {
         storage: "local-images",
       }),
       discription: translatedDocument({}),
+    },
+    ui: {
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
   // A role linked to a user. This indicates a person has a cetain role in the organisation.
@@ -99,6 +105,7 @@ export const lists = {
     },
     ui: {
       labelField: "role",
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
   // A group that has lessons and dictates the contribution.
@@ -119,6 +126,9 @@ export const lists = {
         many: true,
       }),
     },
+    ui: {
+      isHidden: ({ session }) => !isAdmin({ session }),
+    },
   }),
   // Static info pages.
   InfoPage: list({
@@ -130,6 +140,7 @@ export const lists = {
     },
     ui: {
       labelField: "slug",
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
   // A menu link.
@@ -153,6 +164,7 @@ export const lists = {
     },
     ui: {
       labelField: "label_en",
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
   // A menu item that contains one or more links.
@@ -180,6 +192,7 @@ export const lists = {
     },
     ui: {
       labelField: "label_en",
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
   // A downloadable item.
@@ -206,6 +219,7 @@ export const lists = {
     },
     ui: {
       labelField: "label_en",
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
   // An event on the calander.
@@ -257,6 +271,7 @@ export const lists = {
     },
     ui: {
       labelField: "label_en",
+      isHidden: ({ session }) => !isAdmin({ session }),
     },
   }),
 };

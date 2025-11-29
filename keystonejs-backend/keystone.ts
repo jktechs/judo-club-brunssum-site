@@ -1,6 +1,12 @@
 // import express from "express";
 import { config, graphql } from "@keystone-6/core";
-import { emailPassword, google_secret, host, sessionSecret } from "../global";
+import {
+  API_BASE_PATH,
+  emailPassword,
+  google_secret,
+  host,
+  sessionSecret,
+} from "../global";
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from "./schema";
@@ -96,21 +102,21 @@ export default withAuth(
       "local-images": {
         kind: "local",
         type: "image",
-        generateUrl: (path) => host + `api/images${path}`,
-        serverRoute: { path: "/api/images" },
-        storagePath: "public/api/images",
+        generateUrl: (path) => host + API_BASE_PATH + `/images${path}`,
+        serverRoute: { path: API_BASE_PATH + "/images" },
+        storagePath: "public/images",
       },
       "local-files": {
         kind: "local",
         type: "file",
-        generateUrl: (path) => host + `api/files${path}`,
-        serverRoute: { path: "/api/files" },
-        storagePath: "public/api/files",
+        generateUrl: (path) => host + API_BASE_PATH + `/files${path}`,
+        serverRoute: { path: API_BASE_PATH + "/files" },
+        storagePath: "public/files",
       },
     },
     session,
     ui: {
-      basePath: "/api",
+      basePath: API_BASE_PATH,
     },
     graphql: {
       extendGraphqlSchema: graphql.extend((base) => {
@@ -150,7 +156,9 @@ export default withAuth(
                 }
                 let ip = getClientIP(context.req);
                 let resp = await fetch(
-                  "https://www.google.com/recaptcha/api/siteverify?secret=" +
+                  "https://www.google.com/recaptcha" +
+                    API_BASE_PATH +
+                    "/siteverify?secret=" +
                     encodeURIComponent(google_secret) +
                     (ip === undefined
                       ? ""
@@ -268,7 +276,7 @@ export default withAuth(
         // });
         app.use(express.static("../vite-frontend/dist", { fallthrough: true }));
         app.use((req, res, next) => {
-          if (req.path.startsWith("/api")) {
+          if (req.path.startsWith(API_BASE_PATH)) {
             return next(); // Let the 404 handler handle it
           }
           res.sendFile(

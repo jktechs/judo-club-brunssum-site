@@ -56,23 +56,21 @@ export default function Contact() {
             }}
             aria-hidden="true"
           />
-          <div style={{ display: "flex" }}>
-            <input
-              type="text"
-              name="name"
-              placeholder={capitalize(TEXT_MAP["name"][language])}
-              aria-label={capitalize(TEXT_MAP["name"][language])}
-              autoComplete="given-name"
-              style={{ marginRight: "var(--pico-block-spacing-horizontal)" }}
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              aria-label="Email"
-              autoComplete="email"
-            />
-          </div>
+          <input
+            type="text"
+            name="name"
+            placeholder={capitalize(TEXT_MAP["name"][language])}
+            aria-label={capitalize(TEXT_MAP["name"][language])}
+            autoComplete="given-name"
+            style={{ marginRight: "var(--pico-block-spacing-horizontal)" }}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            aria-label="Email"
+            autoComplete="email"
+          />
           <textarea
             name="message"
             placeholder={capitalize(TEXT_MAP["message"][language])}
@@ -80,6 +78,7 @@ export default function Contact() {
           />
           <div style={{ display: "flex", justifyContent: "end" }}>
             <input
+              // disabled
               type="submit"
               value={capitalize(TEXT_MAP["send"][language])}
               style={{ width: "30%" }}

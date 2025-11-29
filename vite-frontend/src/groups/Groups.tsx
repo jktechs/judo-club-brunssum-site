@@ -33,25 +33,33 @@ export default function Groups() {
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Disc.</th>
-                <th>Price</th>
-                <th>Timeslots</th>
+                <th>{capitalize(TEXT_MAP["name"][language])}</th>
+                <th>{capitalize(TEXT_MAP["description"][language])}</th>
+                <th>{capitalize(TEXT_MAP["price"][language])}</th>
+                <th>{capitalize(TEXT_MAP["timeslots"][language])}</th>
               </tr>
             </thead>
             <tbody>
               {data.groups.map((group) => {
                 return (
                   <tr key={group.name}>
-                    <td data-label="Name">{group.name}</td>
-                    <td data-label="Disc.">{group.discription}</td>
-                    <td data-label="Price">
+                    <td data-label={capitalize(TEXT_MAP["name"][language])}>
+                      {group.name}
+                    </td>
+                    <td
+                      data-label={capitalize(TEXT_MAP["description"][language])}
+                    >
+                      {group.discription}
+                    </td>
+                    <td data-label={capitalize(TEXT_MAP["price"][language])}>
                       {"€" +
                         (Math.round(Number(group.price) * 100) / 100).toFixed(
                           2,
                         )}
                     </td>
-                    <td data-label="Timeslots">
+                    <td
+                      data-label={capitalize(TEXT_MAP["timeslots"][language])}
+                    >
                       {group.timeslots.map((timeslot) => {
                         const [hour, minute] = timeslot.duration
                           .split(":")
@@ -72,6 +80,12 @@ export default function Groups() {
               })}
             </tbody>
           </table>
+          <p>
+            Daarnaast bieden we gratis aanvullende trainingen in de vorm van
+            wedstrijdtraining voor onze jeugd en conditie-/krachttraining voor
+            onze senioreleden. Heb je interesse in één van deze trainingen,
+            vraag dan even aan je leraar of het geschikt voor je is.
+          </p>
         </article>
       </>
     );

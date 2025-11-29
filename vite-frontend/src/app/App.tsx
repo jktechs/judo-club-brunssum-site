@@ -75,7 +75,7 @@ export default function App() {
         </main>
         <footer className="container-fluid" style={{ width: "80vw" }}>
           <nav>
-            <Footer />
+            <Footer language={language} />
           </nav>
         </footer>
       </div>
@@ -200,7 +200,7 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
     </>
   );
 }
-function Footer() {
+function Footer({ language }: { language: string }) {
   return (
     <>
       <article>
@@ -212,18 +212,19 @@ function Footer() {
           <Link to="https://www.instagram.com/judoclub_brunssum/">
             <img className="social-logo" src={instagram} />
           </Link>
-          <Link to="#">
+          <Link to={"/" + language + "/info/whatsapp"}>
             <img className="social-logo" src={whatsapp} />
           </Link>
         </hgroup>
       </article>
       <article>
         <hgroup>
-          <h6>Contact gegevens</h6>
+          <h6>{capitalize(TEXT_MAP["contact_information"][language])}</h6>
           <p>
             Regentessestraat 47, 6441 GD Brunssum
             <br />
-            {"Telefoon: "}
+            {capitalize(TEXT_MAP["phone"][language])}
+            {": "}
             <a href="tel:0031622433444">06 - 22 43 34 44</a>
             <br />
             {"Email: "}
@@ -235,11 +236,12 @@ function Footer() {
       </article>
       <article>
         <hgroup>
-          <h6>Sporthal gegevens</h6>
+          <h6>{capitalize(TEXT_MAP["location_information"][language])}</h6>
           <p>
             Heugerstraat 2A, 6443 BS Brunssum
             <br />
-            {"Telefoon: "}
+            {capitalize(TEXT_MAP["phone"][language])}
+            {": "}
             <a href="tel:0031455270016">045 - 52 700 16</a>
           </p>
         </hgroup>

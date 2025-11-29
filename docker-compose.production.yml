@@ -4,7 +4,7 @@ services:
     build: .
     volumes:
       - ./keystonejs-backend/data:/app/keystonejs-backend/data
-      - ./keystonejs-backend/public/api/files:/app/keystonejs-backend/public/api/files
-      - ./keystonejs-backend/public/api/images:/app/keystonejs-backend/public/api/images
+      - ./keystonejs-backend/public/files:/app/keystonejs-backend/public/files
+      - ./keystonejs-backend/public/images:/app/keystonejs-backend/public/images
     ports:
       - "3000:3000"

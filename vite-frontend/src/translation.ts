@@ -119,6 +119,30 @@ export const TEXT_MAP: { [key: string]: LanguageMap } = {
     en: "light",
     nl: "licht",
   },
+  description: {
+    en: "description",
+    nl: "beschrijving",
+  },
+  timeslots: {
+    en: "timeslots",
+    nl: "tijden",
+  },
+  price: {
+    en: "dues",
+    nl: "contributie",
+  },
+  contact_information: {
+    en: "contact information",
+    nl: "contact gegevens",
+  },
+  location_information: {
+    en: "info training location",
+    nl: "sporthal gegevens",
+  },
+  phone: {
+    en: "phone",
+    nl: "telefoon",
+  },
 };
 export function capitalize(str: string): string {
   if (!str) return "";
