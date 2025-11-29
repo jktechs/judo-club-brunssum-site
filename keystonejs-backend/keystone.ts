@@ -119,6 +119,7 @@ export default withAuth(
       basePath: API_BASE_PATH,
     },
     graphql: {
+      path: API_BASE_PATH + "/graphql",
       extendGraphqlSchema: graphql.extend((base) => {
         return {
           mutation: {
