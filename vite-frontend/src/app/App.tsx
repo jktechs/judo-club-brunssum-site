@@ -47,8 +47,12 @@ export default function App() {
         <header>
           <nav className="container-fluid" style={{ width: "80vw" }}>
             <Link to={"/" + language + "/info/home"} className="no-shrink">
-              <img src="/logo.png" className="logo icon big" />
-              <img src="/logo-small.png" className="logo icon small" />
+              <img alt="JCB Logo" src="/logo.png" className="logo icon big" />
+              <img
+                alt="JCB Logo"
+                src="/logo-small.png"
+                className="logo icon small"
+              />
             </Link>
             <ul id="navbar">
               <li>
@@ -67,7 +71,12 @@ export default function App() {
                 <article aria-busy="true" />
               )}
             </ul>
-            <input id="menu-button" type="checkbox" className="no-shrink" />
+            <input
+              aria-label="Open menu"
+              id="menu-button"
+              type="checkbox"
+              className="no-shrink"
+            />
           </nav>
         </header>
         <main className="container-fluid" style={{ width: "80vw" }}>
@@ -132,7 +141,11 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
         <div style={{ display: "block", position: "relative" }}>
           <details className="dropdown">
             <summary role="button" className="outline">
-              <img className="icon" src={language_icon} />
+              <img
+                alt="Language dropdown"
+                className="icon"
+                src={language_icon}
+              />
             </summary>
             <ul dir="rtl">
               {languages.map((language) => (
@@ -148,16 +161,22 @@ function NavBar({ language, menuItems, path, setThemeCookie }: NavBarProps) {
         <div style={{ display: "block", position: "relative" }}>
           <details className="dropdown">
             <summary role="button" className="outline">
-              <img className="icon" src={theme_icon} />
+              <img alt="Theme dropdown" className="icon" src={theme_icon} />
             </summary>
             <ul dir="rtl">
               <li>
-                <a onClick={() => setThemeCookie("light")}>
+                <a
+                  aria-label="Set light theme"
+                  onClick={() => setThemeCookie("light")}
+                >
                   {capitalize(TEXT_MAP["light"][language])}
                 </a>
               </li>
               <li>
-                <a onClick={() => setThemeCookie("dark")}>
+                <a
+                  aria-label="Set dark theme"
+                  onClick={() => setThemeCookie("dark")}
+                >
                   {capitalize(TEXT_MAP["dark"][language])}
                 </a>
               </li>
@@ -207,13 +226,13 @@ function Footer({ language }: { language: string }) {
         <hgroup>
           <h6>Social media</h6>
           <Link to="https://www.facebook.com/JCBrunssum/">
-            <img className="social-logo" src={facebook} />
+            <img alt="Facebook link" className="social-logo" src={facebook} />
           </Link>
           <Link to="https://www.instagram.com/judoclub_brunssum/">
-            <img className="social-logo" src={instagram} />
+            <img alt="Instagram link" className="social-logo" src={instagram} />
           </Link>
           <Link to={"/" + language + "/info/whatsapp"}>
-            <img className="social-logo" src={whatsapp} />
+            <img alt="Whatsapp info" className="social-logo" src={whatsapp} />
           </Link>
         </hgroup>
       </article>
@@ -225,10 +244,12 @@ function Footer({ language }: { language: string }) {
             <br />
             {capitalize(TEXT_MAP["phone"][language])}
             {": "}
-            <a href="tel:0031622433444">06 - 22 43 34 44</a>
+            <a aria-label="Contact phone number" href="tel:0031622433444">
+              06 - 22 43 34 44
+            </a>
             <br />
             {"Email: "}
-            <a href="mailto:info@judoclubbrunssum.n">
+            <a aria-label="Contact email" href="mailto:info@judoclubbrunssum.n">
               info@judoclubbrunssum.nl
             </a>
           </p>
@@ -242,7 +263,9 @@ function Footer({ language }: { language: string }) {
             <br />
             {capitalize(TEXT_MAP["phone"][language])}
             {": "}
-            <a href="tel:0031455270016">045 - 52 700 16</a>
+            <a aria-label="Contact phone number" href="tel:0031455270016">
+              045 - 52 700 16
+            </a>
           </p>
         </hgroup>
       </article>

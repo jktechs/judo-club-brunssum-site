@@ -27,6 +27,7 @@ export default function Person({
         </article>
         <article>
           <img
+            alt={"Portrait of" + data.person.name}
             src={data.person.picture?.url}
             style={{ marginBottom: "var(--pico-block-spacing-vertical)" }}
           />

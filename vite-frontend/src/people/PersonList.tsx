@@ -52,7 +52,10 @@ export default function PersonList({
             >
               {role === null ? capitalize(ROLE_NAMES[c_role][0][language]) : ""}
               <br />
-              <img src={person.picture?.url} />
+              <img
+                alt={"Portrait of" + person.name}
+                src={person.picture?.url}
+              />
               <h2>{person.name}</h2>
             </article>
           );

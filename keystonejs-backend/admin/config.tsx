@@ -10,6 +10,7 @@ function CustomLogo() {
         filter: "brightness(0)",
       }}
       className="logo"
+      alt="JCB Logo"
     />
   );
 }

@@ -31,7 +31,9 @@ export default function Downloads() {
           <article>
             <h2>{section}</h2>
             {items.map((e) => (
-              <a href={e.url}>{e.label}</a>
+              <a aria-label="Download link" href={e.url}>
+                {e.label}
+              </a>
             ))}
           </article>
         );
