@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { capitalize, TEXT_MAP } from "../translation";
 import "./Contact.css";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { CONTACT_MUTATION } from "../queries";
 import type React from "react";
 import Success from "./Success";

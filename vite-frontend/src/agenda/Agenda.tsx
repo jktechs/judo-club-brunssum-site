@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import "./Agenda.css";
 import { type MouseEvent } from "react";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { Temporal } from "@js-temporal/polyfill";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { capitalize, MONTH_NAMES } from "../translation";

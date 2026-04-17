@@ -5,7 +5,7 @@ import instagram from "./instagram.svg";
 import whatsapp from "./whatsapp.svg";
 import language_icon from "./language.svg";
 import theme_icon from "./theme.svg";
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import {
   Link,
   Navigate,

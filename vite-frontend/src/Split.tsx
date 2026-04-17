@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 
 const modules = {
-  App: lazy(() => import("./app/App")),
+  // App: lazy(() => import("./app/App")),
   Agenda: lazy(() => import("./agenda/Agenda")),
   InfoPage: lazy(() => import("./info_page/InfoPage")),
   Groups: lazy(() => import("./groups/Groups")),

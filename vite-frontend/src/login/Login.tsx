@@ -1,6 +1,6 @@
 import "./Login.css";
 import { LOGIN_MUTATION } from "../queries";
-import { useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client/react";
 import { Navigate, useParams } from "react-router-dom";
 import { LOGIN_ERROR } from "../translation";
 export default function Login() {

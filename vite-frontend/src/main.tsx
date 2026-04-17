@@ -1,7 +1,7 @@
 import "./pico.yellow.min.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloClient, InMemoryCache } from "@apollo/client";
 import {
   BrowserRouter,
   Navigate,
@@ -16,9 +16,11 @@ import { ErrorBoundary } from "react-error-boundary";
 import Split from "./Split.tsx";
 
 import App from "./app/App.tsx";
+import { ApolloProvider } from "@apollo/client/react";
+import { HttpLink } from "@apollo/client";
 
 const CLIENT = new ApolloClient({
-  uri: host + API_BASE_PATH + "/graphql",
+  link: new HttpLink({uri: host + API_BASE_PATH + "/graphql"}),
   cache: new InMemoryCache(),
 });
 // eslint-disable-next-line
@@ -29,7 +31,11 @@ const NotFound = () => {
 };
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ErrorBoundary fallbackRender={(e) => <p>error: {e.error.toString()}</p>}>
+    <ErrorBoundary
+      fallbackRender={(e) => (
+        <p>error: {e instanceof Error ? e.message : String(e)}</p>
+      )}
+    >
       <ApolloProvider client={CLIENT}>
         <BrowserRouter>
           <Routes>

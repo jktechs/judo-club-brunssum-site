@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { DocumentRenderer } from "@keystone-6/document-renderer";
 import { useParams } from "react-router-dom";
 import "./InfoPage.css";

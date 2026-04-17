@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { useNavigate } from "react-router-dom";
 import { capitalize, ROLE_NAMES, type Role } from "../translation";
 import { PERSON_LIST_QUERY } from "../queries";

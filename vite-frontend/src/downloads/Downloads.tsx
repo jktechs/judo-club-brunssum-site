@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import "./Downloads.css";
 import { DOWNLOAD_QUERY } from "../queries";
 import { useParams } from "react-router-dom";

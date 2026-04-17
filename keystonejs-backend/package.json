@@ -9,11 +9,11 @@
   },
   "dependencies": {
     "@keystone-6/auth": "^8.1.0",
-    "@keystone-6/core": "^6.5.1",
+    "@keystone-6/core": "^6.5.2",
     "@keystone-6/fields-document": "^9.1.1",
-    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer": "^8.0.0",
     "nodemailer": "^7.0.4",
     "typescript": "^5.5.0",
-    "undici": "^7.14.0"
+    "undici": "^8.1.0"
   }
 }

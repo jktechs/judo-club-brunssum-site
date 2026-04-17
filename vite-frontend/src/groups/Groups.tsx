@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { useParams } from "react-router-dom";
 import { getDuration } from "../agenda/Agenda";
 import { Temporal } from "@js-temporal/polyfill";
