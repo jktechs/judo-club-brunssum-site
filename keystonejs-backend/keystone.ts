@@ -2,11 +2,9 @@
 import { config, graphql } from "@keystone-6/core";
 import {
   API_BASE_PATH,
-  emailPassword,
-  google_secret,
-  host,
-  sessionSecret,
 } from "../global";
+import 'dotenv/config';
+let hostname = process.env.HOSTNAME || "http://localhost:3000";
 
 // to keep this file tidy, we define our schema in a different file
 import { lists } from "./schema";
@@ -45,10 +43,9 @@ type GoogleResponse =
     };
 
 let sessionMaxAge = 60 * 60 * 24; // 24 hours
-
 const session = statelessSessions({
   maxAge: sessionMaxAge,
-  secret: sessionSecret,
+  secret: process.env.SESSION_SECRET || "TEMPORARY_SECRET", // backup secret, should be overridden by environment variable
 });
 
 const { withAuth } = createAuth({
@@ -83,7 +80,7 @@ const EMAIL_CLIENT = createTransport({
   port: 465,
   auth: {
     user: "contact@judoclubbrunssum.nl",
-    pass: emailPassword,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -102,14 +99,14 @@ export default withAuth(
       "local-images": {
         kind: "local",
         type: "image",
-        generateUrl: (path) => host + API_BASE_PATH + `/images${path}`,
+        generateUrl: (path) => hostname + API_BASE_PATH + `/images${path}`,
         serverRoute: { path: API_BASE_PATH + "/images" },
         storagePath: "public/images",
       },
       "local-files": {
         kind: "local",
         type: "file",
-        generateUrl: (path) => host + API_BASE_PATH + `/files${path}`,
+        generateUrl: (path) => hostname + API_BASE_PATH + `/files${path}`,
         serverRoute: { path: API_BASE_PATH + "/files" },
         storagePath: "public/files",
       },
@@ -160,7 +157,7 @@ export default withAuth(
                   "https://www.google.com/recaptcha" +
                     API_BASE_PATH +
                     "/siteverify?secret=" +
-                    encodeURIComponent(google_secret) +
+                    encodeURIComponent(process.env.GOOGLE_SECRET || "") +
                     (ip === undefined
                       ? ""
                       : "&remoteip=" + encodeURIComponent(ip)) +
@@ -174,7 +171,7 @@ export default withAuth(
                 let success =
                   data.success &&
                   data.score > 0.6 &&
-                  host.includes(data.hostname) &&
+                  hostname.includes(data.hostname) &&
                   new Date().getTime() - new Date(data.challenge_ts).getTime() <
                     120000;
                 if (success) {

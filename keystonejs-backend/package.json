@@ -12,6 +12,7 @@
     "@keystone-6/core": "^6.5.2",
     "@keystone-6/fields-document": "^9.1.1",
     "@types/nodemailer": "^8.0.0",
+    "dotenv": "^17.4.2",
     "nodemailer": "^8.0.5",
     "typescript": "^6.0.3",
     "undici": "^8.1.0"
