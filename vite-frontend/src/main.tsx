@@ -10,7 +10,7 @@ import {
   Routes,
   useParams,
 } from "react-router-dom";
-import { host, API_BASE_PATH } from "../../global.ts";
+import { API_BASE_PATH } from "../../global.ts";
 import { TEXT_MAP } from "./translation.ts";
 import { ErrorBoundary } from "react-error-boundary";
 import Split from "./Split.tsx";
@@ -19,8 +19,9 @@ import App from "./app/App.tsx";
 import { ApolloProvider } from "@apollo/client/react";
 import { HttpLink } from "@apollo/client";
 
+const HOST = "http://localhost:3000";
 const CLIENT = new ApolloClient({
-  link: new HttpLink({uri: host + API_BASE_PATH + "/graphql"}),
+  link: new HttpLink({uri: HOST + API_BASE_PATH + "/graphql"}),
   cache: new InMemoryCache(),
 });
 // eslint-disable-next-line
